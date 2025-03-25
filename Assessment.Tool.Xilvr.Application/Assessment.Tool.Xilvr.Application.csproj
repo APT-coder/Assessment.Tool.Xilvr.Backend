@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Base\Assessment.Tool.Xilvr.Base.csproj" />
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Domain\Assessment.Tool.Xilvr.Domain.csproj" />
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Shared\Assessment.Tool.Xilvr.Shared.csproj" />
