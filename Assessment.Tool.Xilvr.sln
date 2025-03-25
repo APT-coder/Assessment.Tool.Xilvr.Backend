@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tool.Xilvr.Api", "Assessment.Tool.Xilvr.Api\Assessment.Tool.Xilvr.Api.csproj", "{97F3167F-0D1D-447B-9E90-83BD5AB17B72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tool.Xilvr.Base", "Assessment.Tool.Xilvr.Base\Assessment.Tool.Xilvr.Base.csproj", "{CC3D45DB-779C-4BCA-AAE3-C7678C0D9671}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tool.Xilvr.Application", "Assessment.Tool.Xilvr.Application\Assessment.Tool.Xilvr.Application.csproj", "{44DA03E6-99CA-49CC-93FE-80A6F4945B97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tool.Xilvr.Domain", "Assessment.Tool.Xilvr.Domain\Assessment.Tool.Xilvr.Domain.csproj", "{48917398-F78A-4C1B-896E-DD1EA2DCC1EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tool.Xilvr.Infrastructure", "Assessment.Tool.Xilvr.Infrastructure\Assessment.Tool.Xilvr.Infrastructure.csproj", "{24A4BD47-A755-4225-A17B-5177F952E7EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tool.Xilvr.Shared", "Assessment.Tool.Xilvr.Shared\Assessment.Tool.Xilvr.Shared.csproj", "{0EDA053B-320D-4153-81DA-719393AF52B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97F3167F-0D1D-447B-9E90-83BD5AB17B72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97F3167F-0D1D-447B-9E90-83BD5AB17B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97F3167F-0D1D-447B-9E90-83BD5AB17B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97F3167F-0D1D-447B-9E90-83BD5AB17B72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC3D45DB-779C-4BCA-AAE3-C7678C0D9671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC3D45DB-779C-4BCA-AAE3-C7678C0D9671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC3D45DB-779C-4BCA-AAE3-C7678C0D9671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC3D45DB-779C-4BCA-AAE3-C7678C0D9671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44DA03E6-99CA-49CC-93FE-80A6F4945B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44DA03E6-99CA-49CC-93FE-80A6F4945B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44DA03E6-99CA-49CC-93FE-80A6F4945B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44DA03E6-99CA-49CC-93FE-80A6F4945B97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48917398-F78A-4C1B-896E-DD1EA2DCC1EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48917398-F78A-4C1B-896E-DD1EA2DCC1EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48917398-F78A-4C1B-896E-DD1EA2DCC1EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48917398-F78A-4C1B-896E-DD1EA2DCC1EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24A4BD47-A755-4225-A17B-5177F952E7EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24A4BD47-A755-4225-A17B-5177F952E7EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24A4BD47-A755-4225-A17B-5177F952E7EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24A4BD47-A755-4225-A17B-5177F952E7EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EDA053B-320D-4153-81DA-719393AF52B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EDA053B-320D-4153-81DA-719393AF52B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EDA053B-320D-4153-81DA-719393AF52B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EDA053B-320D-4153-81DA-719393AF52B6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

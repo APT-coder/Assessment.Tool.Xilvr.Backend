@@ -1,0 +1,6 @@
+@Assessment.Tool.Xilvr.Api_HostAddress = http://localhost:5125
+
+GET {{Assessment.Tool.Xilvr.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
