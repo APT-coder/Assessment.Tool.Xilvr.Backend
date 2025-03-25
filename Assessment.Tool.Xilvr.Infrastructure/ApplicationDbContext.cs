@@ -16,7 +16,7 @@ namespace Assessment.Tool.Xilvr.Infrastructure;
 /// </summary>
 public class ApplicationContext : DbContext, IApplicationDbContext
 {
-    internal const string DEFAULT_SCHEMA = "sfm";
+    internal const string DEFAULT_SCHEMA = "xilvr";
 
     private readonly IMediator _mediator;
 

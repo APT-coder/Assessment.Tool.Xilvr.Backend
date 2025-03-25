@@ -1,4 +1,5 @@
 ﻿using Assessment.Tool.Xilvr.Domain.Entities;
+using Assessment.Tool.Xilvr.Shared.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,7 +9,7 @@ public class ScheduledAssessmentConfiguration : IEntityTypeConfiguration<Schedul
 {
     public void Configure(EntityTypeBuilder<ScheduledAssessment> builder)
     {
-        builder.ToTable("scheduledAssessments", ApplicationContext.DEFAULT_SCHEMA);
+        builder.ToTable("scheduled_assessment", ApplicationContext.DEFAULT_SCHEMA);
         builder.HasKey(sa => sa.Id);
         builder.Property(c => c.Id)
             .HasColumnName("scheduled_assessment_id")
@@ -45,6 +46,19 @@ public class ScheduledAssessmentConfiguration : IEntityTypeConfiguration<Schedul
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("link")
             .HasMaxLength(500);
+        builder.Property(c => c.CreatedDateTime)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("created_date")
+            .IsRequired();
+        builder.Property(c => c.UpdatedDateTime)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("updated_date");
+        builder.Property(c => c.CreatedBy)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("created_by").HasMaxLength(Constants.CREATED_BY_AND_UPDATED_BY_LENGTH);
+        builder.Property(c => c.UpdatedBy)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("updated_by").HasMaxLength(Constants.CREATED_BY_AND_UPDATED_BY_LENGTH);
 
 
         builder.HasOne<Batch>()

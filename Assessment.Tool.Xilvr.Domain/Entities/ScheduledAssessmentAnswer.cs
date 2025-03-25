@@ -18,7 +18,7 @@ public class ScheduledAssessmentAnswer
     /// <summary>
     /// Gets or sets the employee id.
     /// </summary>
-    public int EmployeeId { get; set; } = default!;
+    public long EmployeeId { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the question id.

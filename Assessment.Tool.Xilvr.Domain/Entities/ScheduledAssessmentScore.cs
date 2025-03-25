@@ -20,7 +20,7 @@ public class ScheduledAssessmentScore : AuditFields
     /// <summary>
     /// Gets or sets the employee id.
     /// </summary>
-    public int EmployeeId { get; set; } = default!;
+    public long EmployeeId { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the trainee score for the assessment.
