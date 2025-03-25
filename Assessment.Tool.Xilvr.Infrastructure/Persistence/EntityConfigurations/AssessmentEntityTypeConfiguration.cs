@@ -16,10 +16,12 @@ public class AssessmentConfiguration : IEntityTypeConfiguration<Assessment.Tool.
             .ValueGeneratedOnAdd();
         builder.Property(a => a.Name)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("assessment_name")
             .IsRequired()
             .HasMaxLength(200);
         builder.Property(a => a.TotalMarks)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("total_marks")
             .IsRequired();
         builder.Property(c => c.CreatedDateTime)
             .UsePropertyAccessMode(PropertyAccessMode.Field)

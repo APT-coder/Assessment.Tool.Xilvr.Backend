@@ -9,7 +9,7 @@ public class ApplicationDbContextDesignFactory : IDesignTimeDbContextFactory<App
     public ApplicationContext CreateDbContext(string[] args)
     {
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "..", "Assessment.Tool.Xilvr.Application.Api"))
+            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "..", "Assessment.Tool.Xilvr.Api"))
             .AddJsonFile("appsettings.json")
             .AddEnvironmentVariables()
             .Build();

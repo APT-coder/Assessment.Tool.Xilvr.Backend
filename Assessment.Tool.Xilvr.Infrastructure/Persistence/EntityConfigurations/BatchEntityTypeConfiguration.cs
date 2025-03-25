@@ -16,10 +16,12 @@ public class BatchConfiguration : IEntityTypeConfiguration<Batch>
             .ValueGeneratedOnAdd();
         builder.Property(b => b.Name)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("batch_name")
             .IsRequired()
             .HasMaxLength(100);
         builder.Property(b => b.IsActive)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_active")
             .IsRequired(false);
         builder.Property(c => c.CreatedDateTime)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
