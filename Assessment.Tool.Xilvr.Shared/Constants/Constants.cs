@@ -35,4 +35,15 @@ public static class Constants
     /// </summary>
     public const string PASSWORD_REGEX =
         "Password LIKE '%[A-Z]%' AND Password LIKE '%[0-9]%' AND Password LIKE '%[@#_]%' AND LEN(Password) >= 8";
+
+
+    /// <summary>
+    /// Specfies the success message
+    /// </summary>
+    public const string SUCCESS_MSG = "Success.";
+
+    /// <summary>
+    /// Specifies the no data message
+    /// </summary>
+    public const string NO_DATA = "No Data.";
 }

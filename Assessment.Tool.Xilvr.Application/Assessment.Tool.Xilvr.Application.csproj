@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Shared\Assessment.Tool.Xilvr.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>
