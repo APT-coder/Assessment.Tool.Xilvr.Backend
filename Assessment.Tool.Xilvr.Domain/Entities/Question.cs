@@ -14,11 +14,6 @@ public class Question : AuditFields
     public int Id { get; set; }
 
     /// <summary>
-    /// Gets or sets the assessment id.
-    /// </summary>
-    public int AssessmentId { get; set; } = default!;
-
-    /// <summary>
     /// Gets or sets the question text
     /// </summary>
     public string Text { get; set; } = default!;
@@ -42,4 +37,9 @@ public class Question : AuditFields
     /// Gets or sets the question points
     /// </summary>
     public int Points { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the collection of assessments
+    /// </summary>
+    public ICollection<Assessment> Assessments { get; set; } = new List<Assessment>();
 }

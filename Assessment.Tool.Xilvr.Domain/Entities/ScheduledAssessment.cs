@@ -24,6 +24,16 @@ public class ScheduledAssessment : AuditFields
     public int AssessmentId { get; set; } = default;
 
     /// <summary>
+    /// Gets or sets the batch.
+    /// </summary>
+    public Batch Batch { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the assessment.
+    /// </summary>
+    public Assessment Assessment { get; set; } = default!;
+
+    /// <summary>
     /// Gets or sets the assessment duration.
     /// </summary>
     public TimeSpan AssessmentDuration { get; set; }

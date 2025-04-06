@@ -50,10 +50,5 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
         builder.Property(c => c.UpdatedBy)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("updated_by").HasMaxLength(Constants.CREATED_BY_AND_UPDATED_BY_LENGTH);
-
-        builder.HasOne<Assessment.Tool.Xilvr.Domain.Entities.Assessment>()
-            .WithMany(a => a.Questions)
-            .HasForeignKey(q => q.AssessmentId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

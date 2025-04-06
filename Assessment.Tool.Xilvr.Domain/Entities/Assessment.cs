@@ -25,10 +25,10 @@ public class Assessment : AuditFields
     /// <summary>
     /// Gets or sets the collection of questions
     /// </summary>
-    public ICollection<Question> Questions { get; set; } = default!;
+    public ICollection<Question> Questions { get; set; } = new List<Question>();
 
     /// <summary>
     /// Gets or sets the collection of scheduled assessments
     /// </summary>
-    public ICollection<ScheduledAssessment> ScheduledAssessments { get; set; } = default!;
+    public ICollection<ScheduledAssessment> ScheduledAssessments { get; set; } = new List<ScheduledAssessment>();
 }

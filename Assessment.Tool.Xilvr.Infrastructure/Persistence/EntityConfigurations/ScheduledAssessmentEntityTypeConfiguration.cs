@@ -59,15 +59,22 @@ public class ScheduledAssessmentConfiguration : IEntityTypeConfiguration<Schedul
         builder.Property(c => c.UpdatedBy)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("updated_by").HasMaxLength(Constants.CREATED_BY_AND_UPDATED_BY_LENGTH);
+        
+        builder.Property(c => c.BatchId)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("batch_id");
+        builder.Property(c => c.AssessmentId)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("assessment_id");
 
-
-        builder.HasOne<Batch>()
-            .WithOne()
-            .HasForeignKey<ScheduledAssessment>(sa => sa.BatchId)
+        builder.HasOne(sa => sa.Batch)
+            .WithMany(b => b.ScheduledAssessments)
+            .HasForeignKey(sa => sa.BatchId)
             .OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne<Assessment.Tool.Xilvr.Domain.Entities.Assessment>()
-            .WithOne()
-            .HasForeignKey<ScheduledAssessment>(sa => sa.AssessmentId)
+
+        builder.HasOne(sa => sa.Assessment)
+            .WithMany(a => a.ScheduledAssessments)
+            .HasForeignKey(sa => sa.AssessmentId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

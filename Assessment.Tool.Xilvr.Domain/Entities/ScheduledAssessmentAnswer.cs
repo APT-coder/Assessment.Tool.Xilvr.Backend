@@ -1,4 +1,6 @@
-﻿namespace Assessment.Tool.Xilvr.Domain.Entities;
+﻿using Assessment.Tool.Xilvr.Domain.Aggregates;
+
+namespace Assessment.Tool.Xilvr.Domain.Entities;
 
 /// <summary>
 /// Defines the <see cref="ScheduledAssessmentAnswer" />.
@@ -39,4 +41,19 @@ public class ScheduledAssessmentAnswer
     /// Gets or sets the score for each answer.
     /// </summary>
     public int Score { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the scheduled assessment.
+    /// </summary>
+    public ScheduledAssessment ScheduledAssessment { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the question.
+    /// </summary>
+    public Question Question { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the employee.
+    /// </summary>
+    public Employee Employee { get; set; } = default!;
 }

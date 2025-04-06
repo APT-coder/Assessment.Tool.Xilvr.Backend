@@ -1,4 +1,5 @@
 ﻿using Assessment.Tool.Xilvr.Base.Entities;
+using Assessment.Tool.Xilvr.Domain.Aggregates;
 
 namespace Assessment.Tool.Xilvr.Domain.Entities;
 
@@ -26,4 +27,14 @@ public class ScheduledAssessmentScore : AuditFields
     /// Gets or sets the trainee score for the assessment.
     /// </summary>
     public double Score { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the scheduled assessment.
+    /// </summary>
+    public ScheduledAssessment ScheduledAssessment { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the employee.
+    /// </summary>
+    public Employee Employee { get; set; } = default!;
 }

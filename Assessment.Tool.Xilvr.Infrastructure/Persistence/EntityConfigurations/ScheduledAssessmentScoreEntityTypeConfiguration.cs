@@ -33,13 +33,21 @@ public class ScheduledAssessmentScoreConfiguration : IEntityTypeConfiguration<Sc
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("updated_by").HasMaxLength(Constants.CREATED_BY_AND_UPDATED_BY_LENGTH);
 
-        builder.HasOne<ScheduledAssessment>()
-            .WithOne()
-            .HasForeignKey<ScheduledAssessmentScore>(aa => aa.ScheduledAssessmentId)
+        builder.Property(c => c.ScheduledAssessmentId)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("scheduled_assessment_id");
+        builder.Property(c => c.EmployeeId)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("employee_id");
+
+        builder.HasOne(sas => sas.ScheduledAssessment)
+            .WithMany()
+            .HasForeignKey(sas => sas.ScheduledAssessmentId)
             .OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne<Employee>()
-            .WithOne()
-            .HasForeignKey<ScheduledAssessmentScore>(aa => aa.EmployeeId)
+
+        builder.HasOne(sas => sas.Employee)
+            .WithMany()
+            .HasForeignKey(sas => sas.EmployeeId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

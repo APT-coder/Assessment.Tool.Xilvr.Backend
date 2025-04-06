@@ -28,17 +28,29 @@ public class ScheduledAssessmentAnswerConfiguration : IEntityTypeConfiguration<S
             .HasColumnName("score")
             .IsRequired();
 
-        builder.HasOne<ScheduledAssessment>()
-            .WithOne()
-            .HasForeignKey<ScheduledAssessmentAnswer>(aa => aa.ScheduledAssessmentId)
+        builder.Property(c => c.ScheduledAssessmentId)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("scheduled_assessment_id");
+        builder.Property(c => c.QuestionId)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("question_id");
+        builder.Property(c => c.EmployeeId)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("employee_id");
+
+        builder.HasOne(aa => aa.ScheduledAssessment)
+            .WithMany()
+            .HasForeignKey(aa => aa.ScheduledAssessmentId)
             .OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne<Employee>()
-            .WithOne()
-            .HasForeignKey<ScheduledAssessmentAnswer>(aa => aa.EmployeeId)
+
+        builder.HasOne(aa => aa.Question)
+            .WithMany()
+            .HasForeignKey(aa => aa.QuestionId)
             .OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne<Question>()
-            .WithOne()
-            .HasForeignKey<ScheduledAssessmentAnswer>(aa => aa.QuestionId)
+
+        builder.HasOne(aa => aa.Employee)
+            .WithMany()
+            .HasForeignKey(aa => aa.EmployeeId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

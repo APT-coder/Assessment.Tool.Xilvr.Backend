@@ -21,4 +21,9 @@ public class Batch : AuditFields
     /// Gets or sets the active status.
     /// </summary>
     public bool? IsActive { get; set; }
+
+    /// <summary>
+    /// Gets or sets the collection of scheduled assessments
+    /// </summary>
+    public ICollection<ScheduledAssessment> ScheduledAssessments { get; set; } = new List<ScheduledAssessment>();
 }

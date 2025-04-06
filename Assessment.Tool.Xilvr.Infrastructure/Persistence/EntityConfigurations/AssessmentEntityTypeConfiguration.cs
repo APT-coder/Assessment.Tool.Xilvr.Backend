@@ -37,13 +37,19 @@ public class AssessmentConfiguration : IEntityTypeConfiguration<Assessment.Tool.
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("updated_by").HasMaxLength(Constants.CREATED_BY_AND_UPDATED_BY_LENGTH);
 
-        builder.HasMany(a => a.Questions)
-            .WithOne()
-            .HasForeignKey("AssessmentId")
-            .OnDelete(DeleteBehavior.Cascade);
+        builder
+             .HasMany(a => a.Questions)
+             .WithMany(q => q.Assessments)
+             .UsingEntity(j =>
+             {
+                 j.ToTable("assessment_question", ApplicationContext.DEFAULT_SCHEMA);
+                 j.Property<int>("AssessmentId").HasColumnName("assessment_id");
+                 j.Property<int>("QuestionId").HasColumnName("question_id");
+             });
+
         builder.HasMany(a => a.ScheduledAssessments)
-            .WithOne()
-            .HasForeignKey("AssessmentId")
-            .OnDelete(DeleteBehavior.Cascade);
+           .WithOne(sa => sa.Assessment)
+           .HasForeignKey(sa => sa.AssessmentId)
+           .OnDelete(DeleteBehavior.Cascade);
     }
 }
