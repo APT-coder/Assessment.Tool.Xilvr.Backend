@@ -7,17 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.7.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Base\Assessment.Tool.Xilvr.Base.csproj" />
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Domain\Assessment.Tool.Xilvr.Domain.csproj" />
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Shared\Assessment.Tool.Xilvr.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

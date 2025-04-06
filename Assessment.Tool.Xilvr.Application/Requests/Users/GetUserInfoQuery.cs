@@ -41,7 +41,6 @@ public class GetUserInfoQueryHandler : IQueryHandler<GetUserInfoQuery, ApiRespon
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    /// <exception cref="JoyException"></exception>
     public async Task<ApiResponse<UserInfoDto>> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
     {
         var email = request.Email ?? "aswin@gmail.com";
