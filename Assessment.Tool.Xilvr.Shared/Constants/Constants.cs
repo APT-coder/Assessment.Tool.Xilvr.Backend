@@ -46,4 +46,24 @@ public static class Constants
     /// Specifies the no data message
     /// </summary>
     public const string NO_DATA = "No Data.";
+
+    /// <summary>
+    /// Specifies the invalid credentials message
+    /// </summary>
+    public const string INVALID_CREDENTIAL = "Invalid Credentials";
+
+    /// <summary>
+    /// Specifies the login failed message
+    /// </summary>
+    public const string LOGIN_FAILED = "Login Failed";
+
+    /// <summary>
+    /// Specifies the user pending message
+    /// </summary>
+    public const string PENDING_USER = "User Creation Pending";
+
+    /// <summary>
+    /// Specifies the system constant
+    /// </summary>
+    public const string SYSTEM = "System";
 }

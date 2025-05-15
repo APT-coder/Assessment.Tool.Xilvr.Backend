@@ -1,9 +1,6 @@
-﻿using Assessment.Tool.Xilvr.Application.Dtos.Authentication;
-using Assessment.Tool.Xilvr.Application.Dtos.Users;
-using Assessment.Tool.Xilvr.Application.Requests.Users;
-using Assessment.Tool.Xilvr.Application.Services;
-using Assessment.Tool.Xilvr.Base;
+﻿using Assessment.Tool.Xilvr.Application.Services;
 using Assessment.Tool.Xilvr.Base.CQRS;
+using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Base.Models;
 using Assessment.Tool.Xilvr.Shared.Constants;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +10,9 @@ namespace Assessment.Tool.Xilvr.Application.Requests.Authentication;
 /// <summary>
 /// Command for login
 /// </summary>
-public class UserLoginCommand : IQuery<ApiResponse<LoginResponseDto>>
+public class UserLoginCommand : IQuery<ApiResponse<string>>
 {
-    public string? Token { get; set; }
-
-    public string? UserName { get; set; }
+    public string? Email { get; set; }
 
     public string? Password { get; set; }
 }
@@ -25,7 +20,7 @@ public class UserLoginCommand : IQuery<ApiResponse<LoginResponseDto>>
 /// <summary>
 /// Handler class for UserLoginCommand
 /// </summary>
-public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiResponse<LoginResponseDto>>
+public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiResponse<string>>
 {
     /// <summary>
     /// Application db context
@@ -35,18 +30,18 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
     /// <summary>
     /// Authentication service
     /// </summary>
-    private readonly AuthService _authService;
+    private readonly TokenService _tokenService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UserLoginCommandHandler"/> class.
     /// </summary>
     /// <param name="dbContext">The user dbcontext instance.</param>
-    public UserLoginCommandHandler(IApplicationDbContext dbContext, AuthService authService)
+    public UserLoginCommandHandler(IApplicationDbContext dbContext, TokenService tokenService)
     {
-        ArgumentNullException.ThrowIfNull(dbContext);
+        Ensure.IsNotNull(dbContext, nameof(dbContext));
         _dbContext = dbContext;
-        ArgumentNullException.ThrowIfNull(authService);
-        _authService = authService;
+        Ensure.IsNotNull(_tokenService, nameof(tokenService));
+        _tokenService = tokenService;
     }
 
     /// <summary>
@@ -55,29 +50,17 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<ApiResponse<LoginResponseDto>> Handle(UserLoginCommand request, CancellationToken cancellationToken)
+    public async Task<ApiResponse<string>> Handle(UserLoginCommand request, CancellationToken cancellationToken)
     {
-        if(request.Token is not null)
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Email.EmailId == request.Email, cancellationToken);
+
+        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
         {
-            var ssoEmail = _authService.GetEmailId();
-            var doesUserExist = _authService.DoesUserExist(ssoEmail);
-            if (doesUserExist.Result == false)
-            {
-                throw new Exception(ExceptionCode.UnauthorizedAccess.ToString());
-            }
-
-            var user = _authService.GetUserIdAndEmployeeId(ssoEmail);
-            var response = new LoginResponseDto
-            {
-                UserId = user.Result.UserId,
-                EmployeeId = user.Result.Id,
-                EmailId = ssoEmail,
-                UserStatus = user.Result.User.UserStatus.Status.ToString()
-            };
-
-            return new ApiResponse<LoginResponseDto>(response, Constants.SUCCESS_MSG);
+            return new ApiResponse<string>(null, Constants.INVALID_CREDENTIAL);
         }
 
-        return new ApiResponse<LoginResponseDto>(response, Constants.SUCCESS_MSG);
+        var token = _tokenService.GenerateToken(user);
+        return new ApiResponse<string>(token, Constants.SUCCESS_MSG);
     }
 }

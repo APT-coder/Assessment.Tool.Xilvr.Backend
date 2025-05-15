@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Assessment.Tool.Xilvr.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Assessment.Tool.Xilvr.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250514090800_UpdateUserEntity")]
+    partial class UpdateUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -626,26 +629,6 @@ namespace Assessment.Tool.Xilvr.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("user_status", "xilvr");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = (short)1,
-                            IsActive = true,
-                            Status = "Pending"
-                        },
-                        new
-                        {
-                            Id = (short)3,
-                            IsActive = true,
-                            Status = "InActive"
-                        },
-                        new
-                        {
-                            Id = (short)2,
-                            IsActive = true,
-                            Status = "Active"
-                        });
                 });
 
             modelBuilder.Entity("AssessmentQuestion", b =>

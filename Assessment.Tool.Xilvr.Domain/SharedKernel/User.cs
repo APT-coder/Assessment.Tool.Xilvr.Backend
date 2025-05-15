@@ -2,6 +2,7 @@
 using Assessment.Tool.Xilvr.Base.Entities;
 using Assessment.Tool.Xilvr.Domain.Aggregates;
 using Assessment.Tool.Xilvr.Domain.Entities.RolesAndPermissions;
+using Assessment.Tool.Xilvr.Shared.Enum;
 
 namespace Assessment.Tool.Xilvr.Domain.SharedKernel;
 
@@ -30,7 +31,9 @@ public class User : AuditFields
         DateTime createdDateTime,
         string createdby,
         string password,
-        UserStatus userStatus)
+        UserStatus userStatus,
+        UserProvider userProvider,
+        string providerId)
     {
         ProfileImageUrl = profileImageUrl;
         Phone = phones;
@@ -43,6 +46,8 @@ public class User : AuditFields
         Password = password;
         LasttPasswordReset = createdDateTime;
         UserStatusId = userStatus.Id;
+        UserProvider = userProvider;
+        ProviderId = providerId;
     }
 
     /// <summary>
@@ -116,6 +121,16 @@ public class User : AuditFields
     public UserStatus UserStatus { get; private set; } = default!;
 
     /// <summary>
+    /// Specifies User provider
+    /// </summary>
+    public UserProvider UserProvider { get; private set; } = default!;
+
+    /// <summary>
+    /// Specifies User provider id
+    /// </summary>
+    public string ProviderId { get; private set; } = default!;
+
+    /// <summary>
     /// Specifies the Employees associated with the user
     /// </summary>
     public ICollection<Employee> Employees { get; private set; } = default!;
@@ -130,14 +145,16 @@ public class User : AuditFields
     /// </summary>
     /// /// <returns></returns>
     public static User CreateUser(
-        string profileImageUrl,
-        string firstName,
-        string lastName,
-        string phone,
+        string? profileImageUrl,
+        string? firstName,
+        string? lastName,
+        string? phone,
         Email email,
         string createdBy,
-        string password,
-        UserStatus userStatus)
+        string? password,
+        UserStatus userStatus,
+        UserProvider userProvider,
+        string providerId)
     {
         return new User(profileImageUrl,
             firstName,
@@ -148,7 +165,9 @@ public class User : AuditFields
             DateTime.UtcNow,
             createdBy,
             password,
-            userStatus);
+            userStatus,
+            userProvider,
+            providerId);
     }
 
     /// <summary>

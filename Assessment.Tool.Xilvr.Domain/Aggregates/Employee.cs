@@ -77,17 +77,17 @@ public class Employee : AuditFields
     /// <summary>
     /// Create employee
     /// </summary>
-    public static Employee Create(string profileImageUrl, string firstName, string lastName, string emailId, List<string> batchIds,
-                                    string phoneNumber, string createdBy, string password, string designation, bool isActive)
-    {
-        var email = new Email(emailId);
-        var userStatus = UserStatus.SetFrom(UserStatusValues.Pending);
-        var user = User.CreateUser(profileImageUrl, firstName, lastName, phoneNumber, email,
-                                    createdBy, password, userStatus);
+    //public static Employee Create(string profileImageUrl, string firstName, string lastName, string emailId, List<string> batchIds,
+    //                                string phoneNumber, string createdBy, string password, string designation, bool isActive)
+    //{
+    //    var email = new Email(emailId);
+    //    var userStatus = UserStatus.SetFrom(UserStatusValues.Pending);
+    //    var user = User.CreateUser(profileImageUrl, firstName, lastName, phoneNumber, email,
+    //                                createdBy, password, userStatus);
 
-        var employee = new Employee(user, designation, isActive, batchIds, createdBy, DateTime.UtcNow);
-        return employee;
-    }
+    //    var employee = new Employee(user, designation, isActive, batchIds, createdBy, DateTime.UtcNow);
+    //    return employee;
+    //}
 
     /// <summary>
     /// Update employee details

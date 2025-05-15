@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Assessment.Tool.Xilvr.Application;
+﻿using Assessment.Tool.Xilvr.Application;
 using Assessment.Tool.Xilvr.Domain.Aggregates;
 using Assessment.Tool.Xilvr.Domain.Entities;
 using Assessment.Tool.Xilvr.Domain.Entities.RolesAndPermissions;
@@ -8,6 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Reflection;
 
 namespace Assessment.Tool.Xilvr.Infrastructure;
 
@@ -136,7 +136,7 @@ public class ApplicationContext : DbContext, IApplicationDbContext
             )
         );
 
-        //modelBuilder.SeedData();
+        modelBuilder.SeedData();
     }
 
     /// <summary>

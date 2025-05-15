@@ -1,7 +1,6 @@
 ﻿using Assessment.Tool.Xilvr.Application.Dtos.Users;
 using Assessment.Tool.Xilvr.Application.Requests.Users;
 using Assessment.Tool.Xilvr.Base.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

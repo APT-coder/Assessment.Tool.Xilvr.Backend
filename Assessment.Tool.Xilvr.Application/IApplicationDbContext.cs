@@ -1,4 +1,5 @@
-﻿using Assessment.Tool.Xilvr.Domain.Aggregates;
+﻿using Assessment.Tool.Xilvr.Base.Domain.SeedWork;
+using Assessment.Tool.Xilvr.Domain.Aggregates;
 using Assessment.Tool.Xilvr.Domain.Entities;
 using Assessment.Tool.Xilvr.Domain.Entities.RolesAndPermissions;
 using Assessment.Tool.Xilvr.Domain.SharedKernel;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Assessment.Tool.Xilvr.Application;
 
-public interface IApplicationDbContext
+public interface IApplicationDbContext : IUnitOfWork
 {
     #region DB Sets
 
