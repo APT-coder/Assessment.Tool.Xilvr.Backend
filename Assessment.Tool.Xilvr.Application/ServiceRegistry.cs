@@ -31,7 +31,6 @@ public static class ServiceRegistry
             options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddCookie("ExternalCookies")
         .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
@@ -41,10 +40,39 @@ public static class ServiceRegistry
                 ValidateAudience = true,
                 ValidAudience = configuration["Jwt:Audience"],
                 ValidateLifetime = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
-                ValidateIssuerSigningKey = true
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"])),
+                ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.FromMinutes(5)
+            };
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                    if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
+                    {
+                        context.Token = authHeader.Substring("Bearer ".Length).Trim();
+                        Console.WriteLine($"[JWT] OnMessageReceived Token set to: '{context.Token}'");
+                    }
+                    else
+                    {
+                        Console.WriteLine("[JWT] OnMessageReceived no valid Bearer token found.");
+                    }
+                    return Task.CompletedTask;
+                },
+                OnAuthenticationFailed = context =>
+                {
+                    Console.WriteLine($"[JWT] Authentication failed: {context.Exception.Message}");
+                    return Task.CompletedTask;
+                },
+                OnTokenValidated = context =>
+                {
+                    Console.WriteLine("[JWT] Token successfully validated.");
+                    return Task.CompletedTask;
+                }
             };
         })
+        .AddCookie("ExternalCookies")
         .AddGoogle("Google", options =>
         {
             options.SignInScheme = "ExternalCookies";

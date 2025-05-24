@@ -1,6 +1,8 @@
-﻿using Assessment.Tool.Xilvr.Application.Dtos.Users;
+﻿using Assessment.Tool.Xilvr.Application.Contracts;
+using Assessment.Tool.Xilvr.Application.Dtos.Users;
 using Assessment.Tool.Xilvr.Base;
 using Assessment.Tool.Xilvr.Base.CQRS;
+using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Base.Models;
 using Assessment.Tool.Xilvr.Shared.Constants;
 using Microsoft.EntityFrameworkCore;
@@ -26,13 +28,20 @@ public class GetUserInfoQueryHandler : IQueryHandler<GetUserInfoQuery, ApiRespon
     private readonly IApplicationDbContext _dbContext;
 
     /// <summary>
+    /// Token Service
+    /// </summary>
+    private readonly ITokenService _tokenService;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="GetUserInfoQueryHandler"/> class.
     /// </summary>
     /// <param name="dbContext">The user dbcontext instance.</param>
-    public GetUserInfoQueryHandler(IApplicationDbContext dbContext)
+    public GetUserInfoQueryHandler(IApplicationDbContext dbContext, ITokenService tokenService)
     {
-        ArgumentNullException.ThrowIfNull(dbContext);
+        Ensure.IsNotNull(dbContext, nameof(dbContext));
         _dbContext = dbContext;
+        Ensure.IsNotNull(tokenService, nameof(tokenService));
+        _tokenService = tokenService;
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿using Assessment.Tool.Xilvr.Application.Services;
+﻿using Assessment.Tool.Xilvr.Application.Contracts;
 using Assessment.Tool.Xilvr.Base.CQRS;
 using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Base.Models;
@@ -12,20 +12,40 @@ using System.Security.Claims;
 
 namespace Assessment.Tool.Xilvr.Application.Requests.Authentication;
 
+/// <summary>
+/// Query class for ExternalLoginCallBack
+/// </summary>
 public class ExternalLoginCallbackQuery : IQuery<ApiResponse<string>>
 {
 }
 
+/// <summary>
+/// handler for ExternalLoginCallbackQuery
+/// </summary>
 public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCallbackQuery, ApiResponse<string>>
 {
+    /// <summary>
+    /// Specifies IHttpContextAccessor
+    /// </summary>
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IApplicationDbContext _dbContext;
-    private readonly TokenService _tokenService;
 
+    /// <summary>
+    /// Application db context
+    /// </summary>
+    private readonly IApplicationDbContext _dbContext;
+
+    /// <summary>
+    /// Token Service
+    /// </summary>
+    private readonly ITokenService _tokenService;
+
+    /// <summary>
+    /// Constructor for ExternalLoginCallbackQueryHandler
+    /// </summary>
     public ExternalLoginCallbackQueryHandler(
         IHttpContextAccessor httpContextAccessor,
         IApplicationDbContext dbContext,
-        TokenService tokenService)
+        ITokenService tokenService)
     {
         Ensure.IsNotNull(httpContextAccessor, nameof(httpContextAccessor));
         _httpContextAccessor = httpContextAccessor;
@@ -35,6 +55,9 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
         _tokenService = tokenService;
     }
 
+    /// <summary>
+    /// handle method for ExternalLoginCallbackQuery
+    /// </summary>
     public async Task<ApiResponse<string>> Handle(ExternalLoginCallbackQuery request, CancellationToken cancellationToken)
     {
         var httpContext = _httpContextAccessor.HttpContext;
@@ -65,10 +88,10 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
-        else if (user.UserStatusId == (short)UserStatusValues.Pending)
-        {
-            return new ApiResponse<string>(null, Constants.PENDING_USER);
-        }
+        //else if (user.UserStatusId == (short)UserStatusValues.Pending)
+        //{
+        //    return new ApiResponse<string>(null, Constants.PENDING_USER);
+        //}
 
         var token = _tokenService.GenerateToken(user);
         return new ApiResponse<string>(token, Constants.SUCCESS_MSG);

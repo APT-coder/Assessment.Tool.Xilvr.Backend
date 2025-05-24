@@ -1,4 +1,4 @@
-﻿using Assessment.Tool.Xilvr.Application.Services;
+﻿using Assessment.Tool.Xilvr.Application.Contracts;
 using Assessment.Tool.Xilvr.Base;
 using Assessment.Tool.Xilvr.Base.CQRS;
 using Assessment.Tool.Xilvr.Base.Helpers;
@@ -8,17 +8,33 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Assessment.Tool.Xilvr.Application.Requests.Authentication;
 
+/// <summary>
+/// Query class for refresh token command
+/// </summary>
 public class RefreshTokenCommand : IQuery<ApiResponse<string>>
 {
     public string Token { get; set; } = string.Empty;
 }
 
+/// <summary>
+/// Handler for RefreshTokenCommand
+/// </summary>
 public class RefreshTokenCommandHandler : IQueryHandler<RefreshTokenCommand, ApiResponse<string>>
 {
+    /// <summary>
+    /// Application db context
+    /// </summary>
     private readonly IApplicationDbContext _dbContext;
-    private readonly TokenService _tokenService;
 
-    public RefreshTokenCommandHandler(IApplicationDbContext dbContext, TokenService tokenService)
+    /// <summary>
+    /// Token service
+    /// </summary>
+    private readonly ITokenService _tokenService;
+
+    /// <summary>
+    /// Constructor for RefreshTokenCommandHandler
+    /// </summary>
+    public RefreshTokenCommandHandler(IApplicationDbContext dbContext, ITokenService tokenService)
     {
         Ensure.IsNotNull(dbContext, nameof(dbContext));
         _dbContext = dbContext;
@@ -26,6 +42,9 @@ public class RefreshTokenCommandHandler : IQueryHandler<RefreshTokenCommand, Api
         _tokenService = tokenService;
     }
 
+    /// <summary>
+    /// Handle method
+    /// </summary>
     public async Task<ApiResponse<string>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
         var principal = _tokenService.GetPrincipalFromExpiredToken(request.Token);

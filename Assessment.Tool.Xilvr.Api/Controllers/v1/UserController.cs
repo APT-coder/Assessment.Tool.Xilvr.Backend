@@ -1,8 +1,15 @@
 ﻿using Assessment.Tool.Xilvr.Application.Dtos.Users;
 using Assessment.Tool.Xilvr.Application.Requests.Users;
 using Assessment.Tool.Xilvr.Base.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Text;
 
 namespace Assessment.Tool.Xilvr.Api.Controllers.v1;
 
@@ -11,6 +18,12 @@ namespace Assessment.Tool.Xilvr.Api.Controllers.v1;
 /// </summary>
 public class UserController : BaseController
 {
+    private readonly IConfiguration _config;
+
+    public UserController(IConfiguration config)
+    {
+        _config = config;
+    }
     /// <summary>
     /// Method to get user info by email id
     /// </summary>
@@ -19,6 +32,9 @@ public class UserController : BaseController
     [HttpGet("users")]
     [ProducesResponseType(typeof(ApiResponse<UserInfoDto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Permission(Permissions.VIEW_CANDIDATE_DETAILS,
+    //    Permissions.CANDIDATE_LISTING_VIEW)]
     public async Task<IActionResult> GetUserInfoByEmailId([FromQuery] string? emailId)
     {
         var result = await Mediator.Send(new GetUserInfoQuery { Email = emailId });

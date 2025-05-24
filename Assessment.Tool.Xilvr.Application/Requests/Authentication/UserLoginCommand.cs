@@ -1,4 +1,4 @@
-﻿using Assessment.Tool.Xilvr.Application.Services;
+﻿using Assessment.Tool.Xilvr.Application.Contracts;
 using Assessment.Tool.Xilvr.Base.CQRS;
 using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Base.Models;
@@ -30,13 +30,13 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
     /// <summary>
     /// Authentication service
     /// </summary>
-    private readonly TokenService _tokenService;
+    private readonly ITokenService _tokenService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UserLoginCommandHandler"/> class.
     /// </summary>
     /// <param name="dbContext">The user dbcontext instance.</param>
-    public UserLoginCommandHandler(IApplicationDbContext dbContext, TokenService tokenService)
+    public UserLoginCommandHandler(IApplicationDbContext dbContext, ITokenService tokenService)
     {
         Ensure.IsNotNull(dbContext, nameof(dbContext));
         _dbContext = dbContext;

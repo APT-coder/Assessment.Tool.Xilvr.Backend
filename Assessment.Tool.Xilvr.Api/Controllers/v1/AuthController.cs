@@ -44,6 +44,7 @@ public class AuthController : BaseController
     /// Handles the external login callback and issues a JWT token if successful.
     /// </summary>
     /// <returns>JWT token in ApiResponse.</returns>
+    [ApiExplorerSettings(IgnoreApi = true)]
     [HttpGet("external-login-callback")]
     [ProducesResponseType(typeof(ApiResponse<string>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
