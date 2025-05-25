@@ -1,10 +1,13 @@
-﻿using Assessment.Tool.Xilvr.Application.Services;
+﻿using Assessment.Tool.Xilvr.Application.Contracts;
+using Assessment.Tool.Xilvr.Application.Services;
 using Assessment.Tool.Xilvr.Base.Services.Extensions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 
 namespace Assessment.Tool.Xilvr.Application;
@@ -24,7 +27,7 @@ public static class ServiceRegistry
         services.AddRequestHandlingServicesWithNoTransaction(assemblies);
 
         services.AddHttpContextAccessor();
-        services.AddScoped<TokenService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         services.AddAuthentication(options =>
         {
@@ -79,6 +82,12 @@ public static class ServiceRegistry
             options.ClientId = configuration["Authentication:Google:ClientId"];
             options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
             options.CallbackPath = "/signin-google";
+            options.Scope.Add("profile");
+            options.Scope.Add("email");
+
+            options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+            options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+            options.ClaimActions.MapJsonKey("picture", "picture");
         })
         .AddMicrosoftAccount("Microsoft", options =>
         {
@@ -86,6 +95,17 @@ public static class ServiceRegistry
             options.ClientId = configuration["Authentication:Microsoft:ClientId"];
             options.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
             options.CallbackPath = "/signin-microsoft";
+
+            options.Scope.Add("openid");
+            options.Scope.Add("email");
+            options.Scope.Add("profile");
+            options.Scope.Add("User.Read");
+
+            options.SaveTokens = true;
+
+            options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+            options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+            options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
         });
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Assessment.Tool.Xilvr.Domain.SharedKernel;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
 using Assessment.Tool.Xilvr.Shared.Constants;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Assessment.Tool.Xilvr.Infrastructure.Persistence.EntityConfigurations;
 
@@ -29,7 +29,7 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("profile_image_url")
             .IsRequired(false)
-            .HasMaxLength(Constants.PROFILE_IMAGE_URL_LENGTH);
+            .HasColumnType("text");
         builder.Property(c => c.UserStatusId)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("user_status_id")

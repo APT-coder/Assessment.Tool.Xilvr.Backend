@@ -1,5 +1,6 @@
 ﻿using Assessment.Tool.Xilvr.Base.Entities;
 using Assessment.Tool.Xilvr.Domain.SharedKernel;
+using Assessment.Tool.Xilvr.Shared.Enum;
 
 namespace Assessment.Tool.Xilvr.Domain.Aggregates;
 
@@ -77,17 +78,18 @@ public class Employee : AuditFields
     /// <summary>
     /// Create employee
     /// </summary>
-    //public static Employee Create(string profileImageUrl, string firstName, string lastName, string emailId, List<string> batchIds,
-    //                                string phoneNumber, string createdBy, string password, string designation, bool isActive)
-    //{
-    //    var email = new Email(emailId);
-    //    var userStatus = UserStatus.SetFrom(UserStatusValues.Pending);
-    //    var user = User.CreateUser(profileImageUrl, firstName, lastName, phoneNumber, email,
-    //                                createdBy, password, userStatus);
+    public static Employee Create(string profileImageUrl, string firstName, string lastName, string emailId, List<string> batchIds,
+                                    string phoneNumber, string createdBy, string password, string designation, bool isActive,
+                                    UserProvider userProvider, string providerId)
+    {
+        var email = new Email(emailId);
+        var userStatus = UserStatus.SetFrom(UserStatusValues.Pending);
+        var user = User.CreateUser(profileImageUrl, firstName, lastName, phoneNumber, email,
+                                    createdBy, password, userStatus, userProvider, providerId);
 
-    //    var employee = new Employee(user, designation, isActive, batchIds, createdBy, DateTime.UtcNow);
-    //    return employee;
-    //}
+        var employee = new Employee(user, designation, isActive, batchIds, createdBy, DateTime.UtcNow);
+        return employee;
+    }
 
     /// <summary>
     /// Update employee details
@@ -101,6 +103,8 @@ public class Employee : AuditFields
         BatchIds = batchIds;
         UpdatedDateTime = DateTime.UtcNow;
         UpdatedBy = firstName;
+
+        ActivateUser();
     }
 
     public void ActivateUser()
