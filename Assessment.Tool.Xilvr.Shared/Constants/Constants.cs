@@ -63,7 +63,17 @@ public static class Constants
     public const string PENDING_USER = "User Creation Pending";
 
     /// <summary>
+    /// Specifies the waiting approval message
+    /// </summary>
+    public const string WAITING_APPROVAL = "Waiting for Approval";
+
+    /// <summary>
     /// Specifies the system constant
     /// </summary>
     public const string SYSTEM = "System";
+
+    /// <summary>
+    /// Specifies the update failed message
+    /// </summary>
+    public const string UPDATE_FAILED = "Update Failed";
 }

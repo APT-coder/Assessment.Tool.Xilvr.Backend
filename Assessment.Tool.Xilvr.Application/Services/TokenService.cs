@@ -1,6 +1,7 @@
 ﻿using Assessment.Tool.Xilvr.Application.Contracts;
 using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Domain.SharedKernel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,6 +10,9 @@ using System.Text;
 
 namespace Assessment.Tool.Xilvr.Application.Services;
 
+/// <summary>
+/// Token Service
+/// </summary>
 public class TokenService : ITokenService
 {
     /// <summary>
@@ -16,10 +20,17 @@ public class TokenService : ITokenService
     /// </summary>
     private readonly IConfiguration _config;
 
-    public TokenService(IConfiguration config)
+    /// <summary>
+    /// IHttpContextAccessor
+    /// </summary>
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public TokenService(IConfiguration config, IHttpContextAccessor httpContextAccessor)
     {
         Ensure.IsNotNull(config, nameof(config));
         _config = config;
+        Ensure.IsNotNull(httpContextAccessor, nameof(httpContextAccessor));
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public string GenerateToken(User user)
@@ -46,8 +57,9 @@ public class TokenService : ITokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    public ClaimsPrincipal GetPrincipalFromExpiredToken()
     {
+        var token = GetTokenFromAuthorizationHeader();
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = true,
@@ -71,8 +83,9 @@ public class TokenService : ITokenService
         }
     }
 
-    public string TryGetEmailFromToken(string token)
+    public string TryGetEmailFromToken()
     {
+        var token = GetTokenFromAuthorizationHeader();
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = true,
@@ -95,5 +108,38 @@ public class TokenService : ITokenService
         {
             return null;
         }
+    }
+
+    /// <summary>
+    /// Extracts the Bearer token from the current HttpContext's Authorization header if present.
+    /// Returns null if no valid Bearer token found.
+    /// </summary>
+    public string? GetTokenFromAuthorizationHeader()
+    {
+        var request = _httpContextAccessor.HttpContext?.Request;
+
+        if (request == null)
+        {
+            return null;
+        }
+
+        if (request.Headers.TryGetValue("Authorization", out var authHeader))
+        {
+            var bearerToken = authHeader.ToString();
+            if (!string.IsNullOrEmpty(bearerToken) && bearerToken.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            {
+                return bearerToken.Substring("Bearer ".Length).Trim();
+            }
+        }
+        return null;
+    }
+
+    public string GenerateOtp(int length)
+    {
+        int min = (int)Math.Pow(10, length - 1);
+        int max = (int)Math.Pow(10, length) - 1;
+        Random generator = new Random();
+        var otp = generator.Next(min, max).ToString();
+        return otp;
     }
 }

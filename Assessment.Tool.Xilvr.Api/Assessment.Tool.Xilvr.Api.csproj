@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Application\Assessment.Tool.Xilvr.Application.csproj" />
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Base\Assessment.Tool.Xilvr.Base.csproj" />
+    <ProjectReference Include="..\Assessment.Tool.Xilvr.EmailConnector\Assessment.Tool.Xilvr.EmailConnector.csproj" />
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Infrastructure\Assessment.Tool.Xilvr.Infrastructure.csproj" />
     <ProjectReference Include="..\Assessment.Tool.Xilvr.Shared\Assessment.Tool.Xilvr.Shared.csproj" />
   </ItemGroup>

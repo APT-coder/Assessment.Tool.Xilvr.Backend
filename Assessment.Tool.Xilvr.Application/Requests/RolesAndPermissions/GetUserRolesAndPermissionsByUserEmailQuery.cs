@@ -44,7 +44,7 @@ public class GetUserRolesAndPermissionsByUserEmailQueryHandler
     /// <param name="request">The request containing the query parameters.</param>
     /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
     /// <returns>An API response containing user roles and permissions.</returns>
-    /// <exception cref="JoyException">Thrown when the user is not found.</exception>
+    /// <exception cref="XilvrException">Thrown when the user is not found.</exception>
     public async Task<ApiResponse<UserRolePermissionDto>> Handle(
     GetUserRolesAndPermissionsByUserEmailQuery request,
     CancellationToken cancellationToken)

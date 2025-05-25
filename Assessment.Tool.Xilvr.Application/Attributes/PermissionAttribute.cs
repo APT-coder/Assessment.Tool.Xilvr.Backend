@@ -68,9 +68,8 @@ public class PermissionAttribute : Attribute, IAsyncAuthorizationFilter, IFilter
             return;
         }
 
-        string token = authHeader.Substring("Bearer ".Length).Trim();
         var tokenService = httpContext.RequestServices.GetRequiredService<TokenService>();
-        string emailId = tokenService.TryGetEmailFromToken(token);
+        string emailId = tokenService.TryGetEmailFromToken();
 
         if (emailId == null)
         {

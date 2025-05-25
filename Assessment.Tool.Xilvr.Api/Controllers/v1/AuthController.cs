@@ -16,7 +16,7 @@ public class AuthController : BaseController
     /// </summary>
     ///<param name="UserLoginCommand"></param>
     /// <returns></returns>
-    [HttpPost("login")]
+    [HttpPost("auth/login")]
     [ProducesResponseType(typeof(ApiResponse<string>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
@@ -31,7 +31,7 @@ public class AuthController : BaseController
     /// </summary>
     /// <param name="provider">The external login provider (e.g., Google, Microsoft).</param>
     /// <returns>Challenge result to redirect to external provider.</returns>
-    [HttpGet("external-login")]
+    [HttpGet("auth/external-login")]
     [ProducesResponseType(typeof(void), (int)HttpStatusCode.Redirect)]
     public IActionResult ExternalLogin([FromQuery] string provider)
     {
@@ -45,7 +45,7 @@ public class AuthController : BaseController
     /// </summary>
     /// <returns>JWT token in ApiResponse.</returns>
     [ApiExplorerSettings(IgnoreApi = true)]
-    [HttpGet("external-login-callback")]
+    [HttpGet("auth/external-login-callback")]
     [ProducesResponseType(typeof(ApiResponse<string>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     public async Task<IActionResult> ExternalLoginCallback()
@@ -59,12 +59,31 @@ public class AuthController : BaseController
     /// </summary>
     /// <param name="dto">TokenRequestDto containing expired token</param>
     /// <returns>New JWT token</returns>
-    [HttpPost("refresh")]
+    [HttpPost("auth/refresh-token")]
     [ProducesResponseType(typeof(ApiResponse<string>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand refreshTokenCommand)
     {
         var result = await Mediator.Send(refreshTokenCommand);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Endpoint to generate otp
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
+    [HttpPost("auth/generate-otp/{email}")]
+    [ProducesResponseType(typeof(ApiResponse<string>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+    public async Task<IActionResult> GenerateOtp([FromRoute] string email, [FromQuery] int length)
+    {
+        var command = new GenerateOtpCommand
+        {
+            Email = email,
+            Length = length
+        };
+        var result = await Mediator.Send(command);
         return Ok(result);
     }
 }

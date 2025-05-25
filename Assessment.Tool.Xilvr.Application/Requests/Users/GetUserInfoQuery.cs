@@ -4,6 +4,7 @@ using Assessment.Tool.Xilvr.Base;
 using Assessment.Tool.Xilvr.Base.CQRS;
 using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Base.Models;
+using Assessment.Tool.Xilvr.Base.Shared.Exceptions;
 using Assessment.Tool.Xilvr.Shared.Constants;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,15 +53,16 @@ public class GetUserInfoQueryHandler : IQueryHandler<GetUserInfoQuery, ApiRespon
     /// <returns></returns>
     public async Task<ApiResponse<UserInfoDto>> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
     {
-        var email = request.Email ?? "aswin@gmail.com";
+        var email = request.Email ?? _tokenService.TryGetEmailFromToken();
 
         var user = await _dbContext.Employees
             .Include(e => e.User)
+                .ThenInclude(e => e.UserStatus)
             .FirstOrDefaultAsync(e => e.User.Email.EmailId == email, cancellationToken);
 
         if (user == null)
         {
-            throw new Exception(ExceptionCode.BadRequest.ToString());
+            throw new XilvrException(ExceptionCode.NotFound, Constants.NO_DATA);
         }
 
         var batchNames = await _dbContext.Batches
@@ -78,7 +80,8 @@ public class GetUserInfoQueryHandler : IQueryHandler<GetUserInfoQuery, ApiRespon
             Phone = user.User.Phone,
             ProfileImageUrl = user.User.ProfileImageUrl,
             Designation = user.Designation,
-            Batches = batchNames
+            Batches = batchNames,
+            UserStatus = (short)user.User.UserStatus.Status
         };
 
         return new ApiResponse<UserInfoDto>(response, Constants.SUCCESS_MSG);

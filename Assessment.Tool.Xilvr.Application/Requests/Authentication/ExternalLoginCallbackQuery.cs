@@ -1,7 +1,9 @@
 ﻿using Assessment.Tool.Xilvr.Application.Contracts;
+using Assessment.Tool.Xilvr.Base;
 using Assessment.Tool.Xilvr.Base.CQRS;
 using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Base.Models;
+using Assessment.Tool.Xilvr.Base.Shared.Exceptions;
 using Assessment.Tool.Xilvr.Domain.Aggregates;
 using Assessment.Tool.Xilvr.Domain.SharedKernel;
 using Assessment.Tool.Xilvr.Shared.Constants;
@@ -63,44 +65,46 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
     {
         var httpContext = _httpContextAccessor.HttpContext;
         if (httpContext == null)
-            return new ApiResponse<string>(null, Constants.LOGIN_FAILED);
+            throw new XilvrException(ExceptionCode.ServiceUnavailable, Constants.LOGIN_FAILED);
 
         var result = await httpContext.AuthenticateAsync("ExternalCookies");
 
         if (!result.Succeeded)
-            return new ApiResponse<string>(null, Constants.LOGIN_FAILED);
+            throw new XilvrException(ExceptionCode.UnauthorizedAccess, Constants.INVALID_CREDENTIAL);
 
         var externalId = result.Principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var email = result.Principal.FindFirst(ClaimTypes.Email)?.Value;
         var firstName = result.Principal.FindFirst(ClaimTypes.GivenName)?.Value;
         var lastName = result.Principal.FindFirst(ClaimTypes.Surname)?.Value;
-        //var profileImageUrl = result.Principal.FindFirst("picture")?.Value;
         var provider = result.Properties.Items[".AuthScheme"];
 
         if (string.IsNullOrWhiteSpace(externalId) || string.IsNullOrWhiteSpace(provider))
-            return new ApiResponse<string>(null, Constants.INVALID_CREDENTIAL);
+            throw new XilvrException(ExceptionCode.NotFound, Constants.LOGIN_FAILED);
 
         var profileImageUrl = await GetProfileImageUrl(result, provider, cancellationToken);
 
         var employee = await _dbContext.Employees
+            .Include(e => e.User)
             .FirstOrDefaultAsync(e => e.User.UserProvider.ToString() == provider && e.User.ProviderId == externalId, cancellationToken);
 
         if (employee == null)
         {
             var userProvider = Enum.Parse<UserProvider>(provider);
-            //user = User.CreateUser(null, null, null, null, new Email(email), Constants.SYSTEM, null, UserStatus.SetFrom(UserStatusValues.Pending),
-            //    userProvider, externalId);
 
             employee = Employee.Create(profileImageUrl, firstName, lastName, email, [], null, Constants.SYSTEM,
-                null, null, true, userProvider, externalId);
+                null, null, false, userProvider, externalId);
 
             _dbContext.Employees.Add(employee);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
-        //else if (user.UserStatusId == (short)UserStatusValues.Pending)
+        //else if (employee.User.UserStatusId == (short)UserStatusValues.Pending)
         //{
         //    return new ApiResponse<string>(null, Constants.PENDING_USER);
         //}
+        else if (!employee.IsActive && employee.User.UserStatusId == (short)UserStatusValues.Active)
+        {
+            return new ApiResponse<string>(null, Constants.WAITING_APPROVAL);
+        }
 
         var token = _tokenService.GenerateToken(employee.User);
         return new ApiResponse<string>(token, Constants.SUCCESS_MSG);

@@ -1,11 +1,13 @@
 ﻿using Assessment.Tool.Xilvr.Application.Contracts;
 using Assessment.Tool.Xilvr.Application.Services;
 using Assessment.Tool.Xilvr.Base.Services.Extensions;
+using Assessment.Tool.Xilvr.Domain.Aggregates;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -27,7 +29,10 @@ public static class ServiceRegistry
         services.AddRequestHandlingServicesWithNoTransaction(assemblies);
 
         services.AddHttpContextAccessor();
+        services.AddMemoryCache();
         services.AddScoped<ITokenService, TokenService>();
+
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
         services.AddAuthentication(options =>
         {

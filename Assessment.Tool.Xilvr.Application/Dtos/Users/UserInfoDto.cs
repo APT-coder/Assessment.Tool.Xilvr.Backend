@@ -16,7 +16,7 @@ public class UserInfoDto
     /// <summary>
     /// Specifies employee id
     /// </summary>
-    public long EmployeeId {  get; set; } = default!;
+    public long EmployeeId { get; set; } = default!;
 
     /// <summary>
     /// Specifies the first name
@@ -46,10 +46,15 @@ public class UserInfoDto
     /// <summary>
     /// Specifies designation
     /// </summary>
-    public string Designation {  get; set; } = default!;
+    public string Designation { get; set; } = default!;
 
     /// <summary>
     /// Specifies list of batchIds
     /// </summary>
     public List<string> Batches { get; set; } = default!;
+
+    /// <summary>
+    /// Specifies the user status
+    /// </summary>
+    public short UserStatus { get; set; } = default!;
 }

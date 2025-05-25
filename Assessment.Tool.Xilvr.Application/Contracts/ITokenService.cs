@@ -16,10 +16,20 @@ public interface ITokenService
     /// <summary>
     /// Returns claims from token
     /// </summary>
-    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+    public ClaimsPrincipal GetPrincipalFromExpiredToken();
 
     /// <summary>
     /// Returns email from a valid token if user exists
     /// </summary>
-    public string TryGetEmailFromToken(string token);
+    public string TryGetEmailFromToken();
+
+    /// <summary>
+    /// Returns token from authorisation header
+    /// </summary>
+    public string? GetTokenFromAuthorizationHeader();
+
+    /// <summary>
+    /// Returns otp
+    /// </summary>
+    public string GenerateOtp(int length);
 }

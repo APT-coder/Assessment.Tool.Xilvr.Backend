@@ -19,7 +19,7 @@ public interface IEmployeeRepository : IRepository<Employee>
     /// </summary>
     /// <param name="employeeId"></param>
     /// <returns></returns>
-    Task<Employee?> GetEmployeeById(long employeeId);
+    Task<Employee?> GetEmployeeById(long employeeId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Gets the employee by User Guid

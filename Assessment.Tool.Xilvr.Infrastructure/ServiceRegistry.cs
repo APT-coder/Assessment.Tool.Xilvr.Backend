@@ -1,5 +1,7 @@
 ﻿using Assessment.Tool.Xilvr.Application;
 using Assessment.Tool.Xilvr.Base.Helpers;
+using Assessment.Tool.Xilvr.Domain.Aggregates;
+using Assessment.Tool.Xilvr.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,5 +37,7 @@ public static class ServiceRegistry
                     errorCodesToAdd: null);
             }).UseLoggerFactory(LoggerFactory.Create(builder => builder.AddSerilog()));
         });
+
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
     }
 }

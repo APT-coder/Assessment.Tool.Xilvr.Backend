@@ -1,4 +1,5 @@
 using Assessment.Tool.Xilvr.Application;
+using Assessment.Tool.Xilvr.EmailConnector;
 using Assessment.Tool.Xilvr.Infrastructure;
 using Microsoft.OpenApi.Models;
 
@@ -20,6 +21,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddEmailServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddSwaggerGen(option =>
 {

@@ -1,15 +1,10 @@
 ﻿using Assessment.Tool.Xilvr.Application.Dtos.Users;
 using Assessment.Tool.Xilvr.Application.Requests.Users;
 using Assessment.Tool.Xilvr.Base.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Text;
 
 namespace Assessment.Tool.Xilvr.Api.Controllers.v1;
 

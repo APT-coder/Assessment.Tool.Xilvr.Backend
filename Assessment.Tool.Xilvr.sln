@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tool.Xilvr.Api", "Assessment.Tool.Xilvr.Api\Assessment.Tool.Xilvr.Api.csproj", "{97F3167F-0D1D-447B-9E90-83BD5AB17B72}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tool.Xilvr.Infrastructure", "Assessment.Tool.Xilvr.Infrastructure\Assessment.Tool.Xilvr.Infrastructure.csproj", "{24A4BD47-A755-4225-A17B-5177F952E7EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tool.Xilvr.Shared", "Assessment.Tool.Xilvr.Shared\Assessment.Tool.Xilvr.Shared.csproj", "{0EDA053B-320D-4153-81DA-719393AF52B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tool.Xilvr.EmailConnector", "Assessment.Tool.Xilvr.EmailConnector\Assessment.Tool.Xilvr.EmailConnector.csproj", "{95F45205-E6DC-40FC-A2C7-67CBD2740A16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,8 +47,15 @@ Global
 		{0EDA053B-320D-4153-81DA-719393AF52B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EDA053B-320D-4153-81DA-719393AF52B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EDA053B-320D-4153-81DA-719393AF52B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95F45205-E6DC-40FC-A2C7-67CBD2740A16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95F45205-E6DC-40FC-A2C7-67CBD2740A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95F45205-E6DC-40FC-A2C7-67CBD2740A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95F45205-E6DC-40FC-A2C7-67CBD2740A16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8F2A60DA-366A-4720-8B35-49711E01C1A3}
 	EndGlobalSection
 EndGlobal

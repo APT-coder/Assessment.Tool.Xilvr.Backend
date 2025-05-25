@@ -3,6 +3,7 @@ using Assessment.Tool.Xilvr.Base;
 using Assessment.Tool.Xilvr.Base.CQRS;
 using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Base.Models;
+using Assessment.Tool.Xilvr.Base.Shared.Exceptions;
 using Assessment.Tool.Xilvr.Shared.Constants;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,6 @@ namespace Assessment.Tool.Xilvr.Application.Requests.Authentication;
 /// </summary>
 public class RefreshTokenCommand : IQuery<ApiResponse<string>>
 {
-    public string Token { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -47,22 +47,22 @@ public class RefreshTokenCommandHandler : IQueryHandler<RefreshTokenCommand, Api
     /// </summary>
     public async Task<ApiResponse<string>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var principal = _tokenService.GetPrincipalFromExpiredToken(request.Token);
+        var principal = _tokenService.GetPrincipalFromExpiredToken();
         if (principal == null)
         {
-            throw new Exception(ExceptionCode.UnauthorizedAccess.ToString());
+            throw new XilvrException(ExceptionCode.UnauthorizedAccess, "Principal not found");
         }
 
         var userId = principal.FindFirst("email")?.Value;
         if (userId == null)
         {
-            throw new Exception(ExceptionCode.UnauthorizedAccess.ToString());
+            throw new XilvrException(ExceptionCode.UnauthorizedAccess, "Invalid token");
         }
 
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email.EmailId == userId, cancellationToken);
         if (user == null)
         {
-            throw new Exception(ExceptionCode.UnauthorizedAccess.ToString());
+            throw new XilvrException(ExceptionCode.NotFound, "User not found");
         }
 
         var newToken = _tokenService.GenerateToken(user);
