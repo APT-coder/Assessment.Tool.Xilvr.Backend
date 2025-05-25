@@ -4,8 +4,9 @@ using Assessment.Tool.Xilvr.Base.CQRS;
 using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Base.Models;
 using Assessment.Tool.Xilvr.Base.Shared.Exceptions;
+using Assessment.Tool.Xilvr.Domain.Aggregates;
+using Assessment.Tool.Xilvr.Domain.SharedKernel;
 using Assessment.Tool.Xilvr.Shared.Constants;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Assessment.Tool.Xilvr.Application.Requests.Authentication;
@@ -45,11 +46,16 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
     private readonly IMemoryCache _cache;
 
     /// <summary>
+    /// Employee repository
+    /// </summary>
+    private readonly IEmployeeRepository _employeeRepository;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="UserLoginCommandHandler"/> class.
     /// </summary>
     /// <param name="dbContext">The user dbcontext instance.</param>
     public UserLoginCommandHandler(IApplicationDbContext dbContext, ITokenService tokenService,
-        IMemoryCache memoryCache)
+        IMemoryCache memoryCache, IEmployeeRepository employeeRepository)
     {
         Ensure.IsNotNull(dbContext, nameof(dbContext));
         _dbContext = dbContext;
@@ -57,6 +63,8 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
         _tokenService = tokenService;
         Ensure.IsNotNull(memoryCache, nameof(memoryCache));
         _cache = memoryCache;
+        Ensure.IsNotNull(employeeRepository, nameof(employeeRepository));
+        _employeeRepository = employeeRepository;
     }
 
     /// <summary>
@@ -67,12 +75,19 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
     /// <returns></returns>
     public async Task<ApiResponse<string>> Handle(UserLoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Email.EmailId == request.Email, cancellationToken);
+        var employee = await _employeeRepository.GetEmployeeByEmailAsync(request.Email, cancellationToken);
 
-        if (user == null)
+        if (employee == null)
         {
             throw new XilvrException(ExceptionCode.UnauthorizedAccess, Constants.INVALID_CREDENTIAL);
+        }
+        else if (employee.User.UserStatusId == (short)UserStatusValues.Pending)
+        {
+            return new ApiResponse<string>(null, Constants.PENDING_USER);
+        }
+        else if (!employee.IsActive && employee.User.UserStatusId == (short)UserStatusValues.Active)
+        {
+            return new ApiResponse<string>(null, Constants.WAITING_APPROVAL);
         }
 
         if (request.UseOtp)
@@ -82,7 +97,7 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
                 throw new XilvrException(ExceptionCode.BadRequest, "OTP code is required.");
             }
 
-            var cacheKey = $"OTP_{user.Email.EmailId}";
+            var cacheKey = $"OTP_{employee.User.Email.EmailId}";
             if (!_cache.TryGetValue(cacheKey, out string cachedOtp) || cachedOtp != request.OtpCode)
             {
                 throw new XilvrException(ExceptionCode.UnauthorizedAccess, "Invalid or expired OTP.");
@@ -91,12 +106,17 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
         }
         else
         {
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, employee.User.Password))
             {
                 throw new XilvrException(ExceptionCode.UnauthorizedAccess, Constants.INVALID_CREDENTIAL);
             }
+            else if (!employee.IsActive &&
+                employee.User.LasttPasswordReset < DateTime.UtcNow.AddMonths(-3))
+            {
+                throw new XilvrException(ExceptionCode.PreconditionFailed, Constants.LOGIN_FAILED);
+            }
         }
-        var token = _tokenService.GenerateToken(user);
+        var token = _tokenService.GenerateToken(employee.User);
         return new ApiResponse<string>(token, Constants.SUCCESS_MSG);
     }
 }
