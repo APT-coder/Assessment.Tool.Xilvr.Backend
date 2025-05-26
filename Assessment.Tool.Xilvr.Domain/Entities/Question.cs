@@ -39,6 +39,11 @@ public class Question : AuditFields
     public int Points { get; set; } = default!;
 
     /// <summary>
+    /// Gets or sets the question points
+    /// </summary>
+    public string ContentHash { get; set; } = default!;
+
+    /// <summary>
     /// Gets or sets the collection of assessments
     /// </summary>
     public ICollection<Assessment> Assessments { get; set; } = new List<Assessment>();

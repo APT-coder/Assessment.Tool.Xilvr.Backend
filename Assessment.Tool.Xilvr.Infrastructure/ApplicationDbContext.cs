@@ -66,6 +66,12 @@ public class ApplicationContext : DbContext, IApplicationDbContext
     /// </summary>
     public DbSet<Batch> Batches { get; set; }
 
+
+    /// <summary>
+    /// Specifies the assessments collection
+    /// </summary>
+    public DbSet<Domain.Entities.Assessment> Assessments { get; set; }
+
     /// <summary>
     /// Specifies the questions collection
     /// </summary>

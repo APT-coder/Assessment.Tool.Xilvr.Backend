@@ -62,6 +62,11 @@ public interface IApplicationDbContext : IUnitOfWork
     DbSet<Question> Questions { get; set; }
 
     /// <summary>
+    /// Specifies the assessments collection
+    /// </summary>
+    DbSet<Domain.Entities.Assessment> Assessments { get; set; }
+
+    /// <summary>
     /// Specifies the scheduled assessments collection
     /// </summary>
     DbSet<ScheduledAssessment> ScheduledAssessments { get; set; }

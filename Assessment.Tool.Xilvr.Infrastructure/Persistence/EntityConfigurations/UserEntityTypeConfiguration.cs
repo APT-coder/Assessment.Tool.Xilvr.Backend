@@ -55,6 +55,12 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.Property(c => c.LasttPasswordReset)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("password_reset_on");
+        builder.Property(c => c.UserProvider)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("user_provider");
+        builder.Property(c => c.ProviderId)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("provider_id");
         builder.Property(c => c.CreatedDateTime)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("created_date")

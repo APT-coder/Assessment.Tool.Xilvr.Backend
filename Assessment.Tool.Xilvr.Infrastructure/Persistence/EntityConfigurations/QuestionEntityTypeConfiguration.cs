@@ -37,6 +37,9 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
             .HasColumnType("jsonb")
             .HasColumnName("answer")
             .IsRequired(false);
+        builder.Property(q => q.ContentHash)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("content_hash");
         builder.Property(c => c.CreatedDateTime)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("created_date")
