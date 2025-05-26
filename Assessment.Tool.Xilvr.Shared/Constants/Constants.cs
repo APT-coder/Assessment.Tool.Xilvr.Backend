@@ -76,4 +76,9 @@ public static class Constants
     /// Specifies the update failed message
     /// </summary>
     public const string UPDATE_FAILED = "Update Failed";
+
+    /// <summary>
+    /// Specifies the create failed message
+    /// </summary>
+    public const string CREATE_FAILED = "Create Failed";
 }

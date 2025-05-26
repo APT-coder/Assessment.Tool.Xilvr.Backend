@@ -13,6 +13,20 @@ namespace Assessment.Tool.Xilvr.Api.Controllers.v1;
 public class EmployeeController : BaseController
 {
     /// <summary>
+    /// Method to create employee
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost("employees")]
+    [ProducesResponseType(typeof(ApiResponse<bool>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [AllowAnonymous]
+    public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeCommand createEmployeeCommand)
+    {
+        var result = await Mediator.Send(createEmployeeCommand);
+        return Ok(result);
+    }
+
+    /// <summary>
     /// Method to update employee details
     /// </summary>
     /// <returns></returns>

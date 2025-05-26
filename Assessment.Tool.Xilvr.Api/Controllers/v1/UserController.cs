@@ -19,6 +19,7 @@ public class UserController : BaseController
     {
         _config = config;
     }
+
     /// <summary>
     /// Method to get user info by email id
     /// </summary>

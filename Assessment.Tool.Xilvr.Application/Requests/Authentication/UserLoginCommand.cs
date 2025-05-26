@@ -79,7 +79,7 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
 
         if (employee == null)
         {
-            throw new XilvrException(ExceptionCode.UnauthorizedAccess, Constants.INVALID_CREDENTIAL);
+            throw new XilvrException(ExceptionCode.NotFound, Constants.NO_DATA);
         }
         else if (employee.User.UserStatusId == (short)UserStatusValues.Pending)
         {
