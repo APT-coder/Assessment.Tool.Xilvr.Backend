@@ -72,6 +72,8 @@ public class AddQuestionToAssessmentByIdCommandHandler : IQueryHandler<AddQuesti
         }
 
         var questions = await _assessmentService.SaveQuestions(request.Questions, cancellationToken);
+        var totalMarks = _assessmentService.CalculateTotalMarks(request.Questions, cancellationToken);
+
         var email = _tokenService.TryGetEmailFromToken();
 
         assessment.Questions.Clear();
@@ -82,6 +84,7 @@ public class AddQuestionToAssessmentByIdCommandHandler : IQueryHandler<AddQuesti
 
         assessment.UpdatedDateTime = DateTime.UtcNow;
         assessment.UpdatedBy = email;
+        assessment.TotalMarks = totalMarks;
 
         _dbContext.Assessments.Update(assessment);
         await _dbContext.SaveChangesAsync(cancellationToken);

@@ -56,7 +56,7 @@ public class AssessmentService : IAssessmentService
 
     /// <summary>
     /// Save questions to database.
-    /// </summary>s
+    /// </summary>
     public async Task<List<Question>> SaveQuestions(List<Question> questionList, CancellationToken cancellationToken)
     {
         foreach (var q in questionList)
@@ -96,5 +96,19 @@ public class AssessmentService : IAssessmentService
 
         await _dbContext.SaveChangesAsync(cancellationToken);
         return assessmentQuestions;
+    }
+
+    /// <summary>
+    /// Calculate and return total marks
+    /// </summary>
+    public int CalculateTotalMarks(List<Question> assessmentQuestions, CancellationToken cancellationToken)
+    {
+        var totalMarks = 0;
+        foreach (var q in assessmentQuestions)
+        {
+            totalMarks += q.Points;
+        }
+
+        return totalMarks;
     }
 }

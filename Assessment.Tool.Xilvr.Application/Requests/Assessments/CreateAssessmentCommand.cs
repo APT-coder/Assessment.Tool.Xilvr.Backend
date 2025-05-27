@@ -17,8 +17,6 @@ public class CreateAssessmentCommand : IQuery<ApiResponse<bool>>
 {
     public string Name { get; set; } = default!;
 
-    public int TotalMarks { get; set; }
-
     public List<Question> Questions { get; set; } = default!;
 }
 
@@ -71,11 +69,14 @@ public class CreateAssessmentCommandHandler : IQueryHandler<CreateAssessmentComm
         }
 
         var questions = await _assessmentService.SaveQuestions(request.Questions, cancellationToken);
+        var totalMarks = _assessmentService.CalculateTotalMarks(request.Questions, cancellationToken);
+
         var email = _tokenService.TryGetEmailFromToken();
 
         var assessment = new Domain.Entities.Assessment
         {
             Name = request.Name,
+            TotalMarks = totalMarks,
             Questions = questions,
             CreatedBy = email,
             CreatedDateTime = DateTime.UtcNow,

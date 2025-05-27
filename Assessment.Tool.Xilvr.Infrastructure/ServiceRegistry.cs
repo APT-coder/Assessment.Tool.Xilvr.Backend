@@ -27,9 +27,13 @@ public static class ServiceRegistry
         var connectionString = configuration.GetValue<string>(DB_CONNECTION);
         Ensure.IsNotNull(connectionString, nameof(connectionString));
 
+        var dataSourceBuilder = new Npgsql.NpgsqlDataSourceBuilder(connectionString);
+        dataSourceBuilder.EnableDynamicJson(); 
+        var dataSource = dataSourceBuilder.Build();
+
         services.AddDbContext<IApplicationDbContext, ApplicationContext>(options =>
         {
-            options.UseNpgsql(connectionString, npgsqlOptionsAction: builder =>
+            options.UseNpgsql(dataSource, npgsqlOptionsAction: builder =>
             {
                 builder.EnableRetryOnFailure(
                     maxRetryCount: 5,

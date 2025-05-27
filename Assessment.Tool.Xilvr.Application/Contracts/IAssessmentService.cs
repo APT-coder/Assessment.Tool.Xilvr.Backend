@@ -15,4 +15,9 @@ public interface IAssessmentService
     /// Save questions to database.
     /// </summary>
     public Task<List<Question>> SaveQuestions(List<Question> questionList, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Calculate and return total marks
+    /// </summary>
+    public int CalculateTotalMarks(List<Question> assessmentQuestions, CancellationToken cancellationToken);
 }
