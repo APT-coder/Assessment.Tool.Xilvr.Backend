@@ -1,4 +1,5 @@
-﻿using Assessment.Tool.Xilvr.Application.Contracts;
+﻿using Assessment.Tool.Xilvr.Application.BackgroundJobs;
+using Assessment.Tool.Xilvr.Application.Contracts;
 using Assessment.Tool.Xilvr.Application.Services;
 using Assessment.Tool.Xilvr.Base.Services.Extensions;
 using Microsoft.AspNetCore.Authentication;
@@ -31,6 +32,8 @@ public static class ServiceRegistry
         services.AddMemoryCache();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAssessmentService, AssessmentService>();
+
+        services.AddHostedService<ScheduledAssessmentStatusUpdater>();
 
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
