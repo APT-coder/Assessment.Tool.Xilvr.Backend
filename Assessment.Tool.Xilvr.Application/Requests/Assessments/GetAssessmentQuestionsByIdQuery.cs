@@ -62,6 +62,7 @@ public class GetAssessmentQuestionsByIdQueryHandler : IQueryHandler<GetAssessmen
     public async Task<ApiResponse<AssessmentDetailsDto>> Handle(GetAssessmentQuestionsByIdQuery request, CancellationToken cancellationToken)
     {
         var assessment = await _dbContext.Assessments
+            .Include(a => a.Questions)
         .Where(a => a.Id == request.Id)
         .Select(a => new AssessmentDetailsDto
         {

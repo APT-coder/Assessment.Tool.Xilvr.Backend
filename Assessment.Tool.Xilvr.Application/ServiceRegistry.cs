@@ -32,6 +32,7 @@ public static class ServiceRegistry
         services.AddMemoryCache();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAssessmentService, AssessmentService>();
+        services.AddScoped<IScheduledAssessmentService, ScheduledAssessmentService>();
 
         services.AddHostedService<ScheduledAssessmentStatusUpdater>();
 
