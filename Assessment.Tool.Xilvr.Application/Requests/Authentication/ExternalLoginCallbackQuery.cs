@@ -120,6 +120,7 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
         else if (provider == "Microsoft")
         {
             var accessToken = result.Properties.GetTokenValue("access_token");
+            Console.WriteLine(accessToken);
             if (!string.IsNullOrEmpty(accessToken))
             {
                 try

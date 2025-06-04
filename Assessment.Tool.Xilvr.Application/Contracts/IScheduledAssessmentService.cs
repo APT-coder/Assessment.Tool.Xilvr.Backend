@@ -11,4 +11,9 @@ public interface IScheduledAssessmentService
     /// Returns scheduled assessment answer with score and isCorrect calculated.
     /// </summary>
     public ScheduledAssessmentAnswer CalculateScoreForAnswer(ScheduledAssessmentAnswer answer);
+
+    /// <summary>
+    /// Updates total score for given list of employees.
+    /// </summary>
+    public Task UpdateTotalScore(int scheduledAssessmentId, List<long> employeeIds, CancellationToken cancellationToken);
 }

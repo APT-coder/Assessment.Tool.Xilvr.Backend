@@ -73,6 +73,11 @@ public class UpdateScheduledAssessmentCommandHandler : IQueryHandler<UpdateSched
             scheduledAssessment.AssessmentId = assessmentId;
         }
 
+        if (request.StartDate != scheduledAssessment.StartDate || request.EndDate != scheduledAssessment.EndDate)
+        {
+            scheduledAssessment.AssessmentStatus = Shared.Enum.AssessmentStatus.Rescheduled;
+        }
+
         var email = _tokenService.TryGetEmailFromToken();
 
         scheduledAssessment.AssessmentDuration = request.AssessmentDuration ?? scheduledAssessment.AssessmentDuration;

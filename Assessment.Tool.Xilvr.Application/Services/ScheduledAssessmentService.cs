@@ -1,6 +1,7 @@
 ﻿using Assessment.Tool.Xilvr.Application.Contracts;
 using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Assessment.Tool.Xilvr.Application.Services;
 
@@ -84,4 +85,56 @@ public class ScheduledAssessmentService : IScheduledAssessmentService
 
         return answer;
     }
+
+    public async Task UpdateTotalScore(int scheduledAssessmentId, List<long> employeeIds, CancellationToken cancellationToken)
+    {
+        var totals = await _dbContext.ScheduledAssessmentsAnswers
+            .Where(a => a.ScheduledAssessmentId == scheduledAssessmentId && employeeIds.Contains(a.EmployeeId))
+            .GroupBy(a => a.EmployeeId)
+            .Select(g => new
+            {
+                EmployeeId = g.Key,
+                TotalScore = g.Sum(x => x.Score)
+            })
+            .ToDictionaryAsync(x => x.EmployeeId, x => x.TotalScore, cancellationToken);
+
+        var existingScores = await _dbContext.ScheduledAssessmentsScores
+            .Where(s => s.ScheduledAssessmentId == scheduledAssessmentId && employeeIds.Contains(s.EmployeeId))
+            .ToListAsync(cancellationToken);
+
+        var email = _tokenService.TryGetEmailFromToken();
+
+        foreach (var kvp in totals)
+        {
+            var employeeId = kvp.Key;
+            var totalScore = kvp.Value;
+
+            var existing = existingScores.FirstOrDefault(s => s.EmployeeId == employeeId);
+
+            if (existing != null)
+            {
+                existing.Score = totalScore;
+                existing.UpdatedBy = email;
+                existing.UpdatedDateTime = DateTime.UtcNow;
+                existing.IsEvaluated = true;
+                _dbContext.ScheduledAssessmentsScores.Update(existing);
+            }
+            else
+            {
+                var newScore = new ScheduledAssessmentScore
+                {
+                    ScheduledAssessmentId = scheduledAssessmentId,
+                    EmployeeId = employeeId,
+                    Score = totalScore,
+                    IsEvaluated = true,
+                    CreatedBy = email,
+                    CreatedDateTime = DateTime.UtcNow
+                };
+                _dbContext.ScheduledAssessmentsScores.Add(newScore);
+            }
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
 }

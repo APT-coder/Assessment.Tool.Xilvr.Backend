@@ -60,6 +60,7 @@ public class GetScheduledAssessmentAnswerByIdQueryHandler : IQueryHandler<GetSch
             .FirstOrDefaultAsync(s => s.Id == request.ScheduledAssessmentId, cancellationToken);
 
         var employee = await _dbContext.Employees
+            .Include(e => e.User)
             .FirstOrDefaultAsync(e => e.Id == request.EmployeeId, cancellationToken);
 
         if (scheduledAssessment == null || employee == null)

@@ -65,6 +65,7 @@ public class GetScheduledAssessmentScoreByIdQueryHandler : IQueryHandler<GetSche
         }
 
         var employeesInBatch = _dbContext.Employees
+            .Include(e => e.User)
             .AsEnumerable()
             .Where(e => e.BatchIds.Contains(scheduledAssessment.BatchId.ToString()))
             .ToList();

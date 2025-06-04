@@ -19,6 +19,10 @@ public class ScheduledAssessmentScoreConfiguration : IEntityTypeConfiguration<Sc
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("total_score")
             .IsRequired();
+        builder.Property(aa => aa.IsEvaluated)
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_evaluated")
+            .HasDefaultValue(false);
         builder.Property(c => c.CreatedDateTime)
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("created_date")

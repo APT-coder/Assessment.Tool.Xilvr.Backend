@@ -102,6 +102,12 @@ public class GetScheduledAssessmentsByEmployeeIdQueryHandler : IQueryHandler<Get
                 StartDate = s.StartDate,
                 EndDate = s.EndDate,
                 AssessmentStatus = s.AssessmentStatus,
+                IsEvaluated = request.ForEmployee == true
+                    ? _dbContext.ScheduledAssessmentsScores
+                        .Where(a => a.ScheduledAssessmentId == s.Id && a.EmployeeId == request.EmployeeId)
+                        .Select(a => (bool?)a.IsEvaluated)
+                        .FirstOrDefault()
+                    : null
             })
             .Skip(request.Skip)
             .Take(request.Take)

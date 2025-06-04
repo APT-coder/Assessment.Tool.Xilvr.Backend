@@ -38,6 +38,11 @@ public class ScheduledAssessmentListDto
     public DateTime EndDate { get; set; }
 
     /// <summary>
+    /// Gets or sets the is evaluated flag.
+    /// </summary>
+    public bool? IsEvaluated { get; set; }
+
+    /// <summary>
     /// Gets or sets the assessment status.
     /// </summary>
     public AssessmentStatus AssessmentStatus { get; set; } = default!;

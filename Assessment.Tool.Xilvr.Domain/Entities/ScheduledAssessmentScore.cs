@@ -29,6 +29,11 @@ public class ScheduledAssessmentScore : AuditFields
     public double Score { get; set; } = default!;
 
     /// <summary>
+    /// Gets or sets the is evaluated flag.
+    /// </summary>
+    public bool IsEvaluated { get; set; }
+
+    /// <summary>
     /// Gets or sets the scheduled assessment.
     /// </summary>
     public ScheduledAssessment ScheduledAssessment { get; set; } = default!;
