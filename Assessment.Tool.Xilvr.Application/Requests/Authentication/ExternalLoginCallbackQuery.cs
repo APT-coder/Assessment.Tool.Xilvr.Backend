@@ -5,6 +5,7 @@ using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Base.Models;
 using Assessment.Tool.Xilvr.Base.Shared.Exceptions;
 using Assessment.Tool.Xilvr.Domain.Aggregates;
+using Assessment.Tool.Xilvr.Domain.Entities.RolesAndPermissions;
 using Assessment.Tool.Xilvr.Domain.SharedKernel;
 using Assessment.Tool.Xilvr.Shared.Constants;
 using Assessment.Tool.Xilvr.Shared.Enum;
@@ -43,12 +44,18 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
     private readonly ITokenService _tokenService;
 
     /// <summary>
+    /// RolesAndPermissions Service
+    /// </summary>
+    private readonly IRolesAndPermissionsService _rolesAndPermissionsService;
+
+    /// <summary>
     /// Constructor for ExternalLoginCallbackQueryHandler
     /// </summary>
     public ExternalLoginCallbackQueryHandler(
         IHttpContextAccessor httpContextAccessor,
         IApplicationDbContext dbContext,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        IRolesAndPermissionsService rolesAndPermissionsService)
     {
         Ensure.IsNotNull(httpContextAccessor, nameof(httpContextAccessor));
         _httpContextAccessor = httpContextAccessor;
@@ -56,6 +63,8 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
         _dbContext = dbContext;
         Ensure.IsNotNull(tokenService, nameof(tokenService));
         _tokenService = tokenService;
+        Ensure.IsNotNull(rolesAndPermissionsService, nameof(rolesAndPermissionsService));
+        _rolesAndPermissionsService = rolesAndPermissionsService;
     }
 
     /// <summary>
@@ -93,6 +102,9 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
 
             employee = Employee.Create(profileImageUrl, firstName, lastName, email, [], null, Constants.SYSTEM,
                 null, null, false, userProvider, externalId);
+
+            var baseRole = await _rolesAndPermissionsService.GetRole(Roles.BASE_ROLE, cancellationToken);
+            await _rolesAndPermissionsService.UpdateUserRole([baseRole], employee.UserId, cancellationToken);
 
             _dbContext.Employees.Add(employee);
             await _dbContext.SaveChangesAsync(cancellationToken);

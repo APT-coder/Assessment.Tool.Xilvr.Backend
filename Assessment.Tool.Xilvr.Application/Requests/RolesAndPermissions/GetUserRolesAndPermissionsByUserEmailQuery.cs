@@ -50,12 +50,13 @@ public class GetUserRolesAndPermissionsByUserEmailQueryHandler
     CancellationToken cancellationToken)
     {
         // Retrieve the user with their roles and permissions from the database not including internal permissions.
-        var userWithRolesAndPermissions = await _dbContext.Users
-            .Where(x => x.Email.EmailId == request.Email && x.IsActiveUser())
+        var userWithRolesAndPermissions = await _dbContext.Employees
+            .Include(u => u.User)
+            .Where(x => x.User.Email.EmailId == request.Email && x.IsActive)
             .Select(x => new
             {
-                Roles = x.UserRoles.Select(ur => ur.Role.Name),
-                Permissions = x.UserRoles
+                Roles = x.User.UserRoles.Select(ur => ur.Role.Name),
+                Permissions = x.User.UserRoles
                     .SelectMany(ur => ur.Role.RolePermissions.Select(rp => rp.Permission.PermissionKey))
             })
             .FirstOrDefaultAsync(cancellationToken) ?? throw new Exception(ExceptionCode.BadRequest.ToString());
