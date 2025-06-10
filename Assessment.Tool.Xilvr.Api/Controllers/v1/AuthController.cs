@@ -1,6 +1,7 @@
 ﻿using Assessment.Tool.Xilvr.Application.Requests.Authentication;
 using Assessment.Tool.Xilvr.Base.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -36,7 +37,12 @@ public class AuthController : BaseController
     public IActionResult ExternalLogin([FromQuery] string provider)
     {
         var redirectUrl = Url.Action(nameof(ExternalLoginCallback));
-        var props = new AuthenticationProperties { RedirectUri = redirectUrl };
+        var props = new AuthenticationProperties
+        {
+            RedirectUri = redirectUrl
+        };
+        props.Items["prompt"] = "select_account";
+
         return Challenge(props, provider);
     }
 
@@ -51,7 +57,7 @@ public class AuthController : BaseController
     public async Task<IActionResult> ExternalLoginCallback()
     {
         var result = await Mediator.Send(new ExternalLoginCallbackQuery());
-        return Ok(result);
+        return Redirect($"https://localhost:4200?message={result.Message}&token={result.Data}");
     }
 
     /// <summary>
@@ -59,12 +65,12 @@ public class AuthController : BaseController
     /// </summary>
     /// <param name="dto">TokenRequestDto containing expired token</param>
     /// <returns>New JWT token</returns>
-    [HttpPost("auth/refresh-token")]
+    [HttpGet("auth/get-token")]
     [ProducesResponseType(typeof(ApiResponse<string>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand refreshTokenCommand)
+    public async Task<IActionResult> RefreshToken(CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(refreshTokenCommand);
+        var result = await Mediator.Send(new GetTokenCommand(), cancellationToken);
         return Ok(result);
     }
 
@@ -85,5 +91,12 @@ public class AuthController : BaseController
         };
         var result = await Mediator.Send(command);
         return Ok(result);
+    }
+
+    [HttpPost("auth/logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return Ok();
     }
 }

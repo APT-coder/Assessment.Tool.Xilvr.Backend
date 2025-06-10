@@ -1,6 +1,9 @@
 ﻿using Assessment.Tool.Xilvr.Application.Contracts;
 using Assessment.Tool.Xilvr.Base.Helpers;
+using Assessment.Tool.Xilvr.Domain.Aggregates;
 using Assessment.Tool.Xilvr.Domain.SharedKernel;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -141,5 +144,22 @@ public class TokenService : ITokenService
         Random generator = new Random();
         var otp = generator.Next(min, max).ToString();
         return otp;
+    }
+
+    public async Task SignInUserWithCookie(string email, Employee employee, string provider, HttpContext httpContext)
+    {
+        await httpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.NameIdentifier, employee.User.Id.ToString()),
+                new Claim("provider", provider),
+            }, CookieAuthenticationDefaults.AuthenticationScheme)),
+            new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(14)
+            });
     }
 }

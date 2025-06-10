@@ -7,6 +7,7 @@ using Assessment.Tool.Xilvr.Base.Shared.Exceptions;
 using Assessment.Tool.Xilvr.Domain.Aggregates;
 using Assessment.Tool.Xilvr.Domain.SharedKernel;
 using Assessment.Tool.Xilvr.Shared.Constants;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Assessment.Tool.Xilvr.Application.Requests.Authentication;
@@ -51,11 +52,17 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
     private readonly IEmployeeRepository _employeeRepository;
 
     /// <summary>
+    /// Http context accessor
+    /// </summary>
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="UserLoginCommandHandler"/> class.
     /// </summary>
     /// <param name="dbContext">The user dbcontext instance.</param>
     public UserLoginCommandHandler(IApplicationDbContext dbContext, ITokenService tokenService,
-        IMemoryCache memoryCache, IEmployeeRepository employeeRepository)
+        IMemoryCache memoryCache, IEmployeeRepository employeeRepository,
+        IHttpContextAccessor httpContextAccessor)
     {
         Ensure.IsNotNull(dbContext, nameof(dbContext));
         _dbContext = dbContext;
@@ -65,6 +72,8 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
         _cache = memoryCache;
         Ensure.IsNotNull(employeeRepository, nameof(employeeRepository));
         _employeeRepository = employeeRepository;
+        Ensure.IsNotNull(httpContextAccessor, nameof(httpContextAccessor));
+        _httpContextAccessor = httpContextAccessor;
     }
 
     /// <summary>
@@ -117,6 +126,8 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
             }
         }
         var token = _tokenService.GenerateToken(employee.User);
+        var httpContext = _httpContextAccessor.HttpContext;
+        await _tokenService.SignInUserWithCookie(request.Email, employee, null, httpContext);
         return new ApiResponse<string>(token, Constants.SUCCESS_MSG);
     }
 }

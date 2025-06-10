@@ -81,7 +81,8 @@ public class GetUserInfoQueryHandler : IQueryHandler<GetUserInfoQuery, ApiRespon
             ProfileImageUrl = user.User.ProfileImageUrl,
             Designation = user.Designation,
             Batches = batchNames,
-            UserStatus = (short)user.User.UserStatus.Status
+            UserStatus = (short)user.User.UserStatus.Status,
+            UserProvider = user.User.UserProvider
         };
 
         return new ApiResponse<UserInfoDto>(response, Constants.SUCCESS_MSG);

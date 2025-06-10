@@ -1,4 +1,4 @@
-﻿using Assessment.Tool.Xilvr.Domain.SharedKernel;
+﻿using Assessment.Tool.Xilvr.Shared.Enum;
 
 namespace Assessment.Tool.Xilvr.Application.Dtos.Users;
 
@@ -57,4 +57,9 @@ public class UserInfoDto
     /// Specifies the user status
     /// </summary>
     public short UserStatus { get; set; } = default!;
+
+    /// <summary>
+    /// Specifies the user provider
+    /// </summary>
+    public UserProvider UserProvider { get; set; } = default!;
 }
