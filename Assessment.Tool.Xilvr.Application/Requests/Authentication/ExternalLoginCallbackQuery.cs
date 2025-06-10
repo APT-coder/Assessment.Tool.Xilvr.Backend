@@ -100,7 +100,7 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
             var userProvider = Enum.Parse<UserProvider>(provider);
 
             employee = Employee.Create(profileImageUrl, firstName, lastName, email, [], null, Constants.SYSTEM,
-                null, null, false, userProvider, externalId);
+                null, null, true, userProvider, externalId);
 
             var baseRole = await _rolesAndPermissionsService.GetRole(Roles.BASE_ROLE, cancellationToken);
             await _rolesAndPermissionsService.UpdateUserRole([baseRole], employee.UserId, cancellationToken);
@@ -108,11 +108,16 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
             _dbContext.Employees.Add(employee);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
-        //else if (employee.User.UserStatusId == (short)UserStatusValues.Pending)
-        //{
-        //    return new ApiResponse<string>(null, Constants.PENDING_USER);
-        //}
-        else if (!employee.IsActive && employee.User.UserStatusId == (short)UserStatusValues.Active)
+
+        if (employee.User.UserStatusId == (short)UserStatusValues.InActive)
+        {
+            return new ApiResponse<string>(null, "Inactive User");
+        }
+        else if (employee.User.UserStatusId == (short)UserStatusValues.PendingProfileCompletion)
+        {
+            return new ApiResponse<string>(null, Constants.PENDING_USER);
+        }
+        else if (employee.User.UserStatusId == (short)UserStatusValues.PendingApproval)
         {
             return new ApiResponse<string>(null, Constants.WAITING_APPROVAL);
         }

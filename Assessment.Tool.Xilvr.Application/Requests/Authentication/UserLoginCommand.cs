@@ -86,15 +86,15 @@ public class UserLoginCommandHandler : IQueryHandler<UserLoginCommand, ApiRespon
     {
         var employee = await _employeeRepository.GetEmployeeByEmailAsync(request.Email, cancellationToken);
 
-        if (employee == null)
+        if (employee == null || employee.User.UserStatusId == (short)UserStatusValues.InActive)
         {
             throw new XilvrException(ExceptionCode.NotFound, Constants.NO_DATA);
         }
-        else if (employee.User.UserStatusId == (short)UserStatusValues.Pending)
+        else if (employee.User.UserStatusId == (short)UserStatusValues.PendingProfileCompletion)
         {
             return new ApiResponse<string>(null, Constants.PENDING_USER);
         }
-        else if (!employee.IsActive && employee.User.UserStatusId == (short)UserStatusValues.Active)
+        else if (employee.User.UserStatusId == (short)UserStatusValues.PendingApproval)
         {
             return new ApiResponse<string>(null, Constants.WAITING_APPROVAL);
         }

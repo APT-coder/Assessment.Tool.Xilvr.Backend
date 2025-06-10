@@ -13,7 +13,7 @@ public static class Constants
     /// <summary>
     /// Max length of user status
     /// </summary>
-    public const int USER_STATUS_LENGTH = 15;
+    public const int USER_STATUS_LENGTH = 40;
 
     /// <summary>
     /// Specifies the max length of profile image   

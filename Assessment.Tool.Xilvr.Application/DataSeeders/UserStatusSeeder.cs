@@ -15,7 +15,8 @@ public static class UserStatusSeeder
     {
         return new List<UserStatus>()
         {
-            UserStatus.SetFrom(UserStatusValues.Pending),
+            UserStatus.SetFrom(UserStatusValues.PendingProfileCompletion),
+            UserStatus.SetFrom(UserStatusValues.PendingApproval),
             UserStatus.SetFrom(UserStatusValues.InActive),
             UserStatus.SetFrom(UserStatusValues.Active),
         };

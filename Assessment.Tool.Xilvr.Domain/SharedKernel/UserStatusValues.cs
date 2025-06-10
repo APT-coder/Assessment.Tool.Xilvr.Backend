@@ -6,17 +6,22 @@
 public enum UserStatusValues
 {
     /// <summary>
-    /// Specifies pending status
+    /// Specifies pending profile completion status - user has registered but needs to complete their profile
     /// </summary>
-    Pending = 1,
+    PendingProfileCompletion = 1,
 
     /// <summary>
-    /// Specifies active status
+    /// Specifies pending approval status - user has completed profile but is awaiting approval
     /// </summary>
-    Active = 2,
+    PendingApproval = 2,
 
     /// <summary>
-    /// Specifies inactive status
+    /// Specifies active status - user is approved and fully active
     /// </summary>
-    InActive = 3,
+    Active = 3,
+
+    /// <summary>
+    /// Specifies inactive status - user account is deactivated
+    /// </summary>
+    InActive = 4,
 }

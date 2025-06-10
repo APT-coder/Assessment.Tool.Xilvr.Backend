@@ -83,9 +83,11 @@ public class Employee : AuditFields
                                     UserProvider userProvider, string providerId)
     {
         var email = new Email(emailId);
-        var userStatus = UserStatus.SetFrom(UserStatusValues.Pending);
+        var userStatus = UserStatus.SetFrom(UserStatusValues.PendingProfileCompletion);
         var user = User.CreateUser(profileImageUrl, firstName, lastName, phoneNumber, email,
                                     createdBy, password, userStatus, userProvider, providerId);
+
+        user.Activate();
 
         var employee = new Employee(user, designation, isActive, batchIds, createdBy, DateTime.UtcNow);
         return employee;
@@ -103,8 +105,6 @@ public class Employee : AuditFields
         BatchIds = batchIds;
         UpdatedDateTime = DateTime.UtcNow;
         UpdatedBy = firstName;
-
-        ActivateUser();
     }
 
     public void ActivateUser()
