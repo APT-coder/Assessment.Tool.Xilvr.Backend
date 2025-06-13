@@ -89,8 +89,6 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
         if (string.IsNullOrWhiteSpace(externalId) || string.IsNullOrWhiteSpace(provider))
             throw new XilvrException(ExceptionCode.NotFound, Constants.LOGIN_FAILED);
 
-        var profileImageUrl = await GetProfileImageUrl(result, provider, cancellationToken);
-
         var employee = await _dbContext.Employees
             .Include(e => e.User)
             .FirstOrDefaultAsync(e => e.User.UserProvider.ToString() == provider && e.User.ProviderId == externalId, cancellationToken);
@@ -99,11 +97,13 @@ public class ExternalLoginCallbackQueryHandler : IQueryHandler<ExternalLoginCall
         {
             var userProvider = Enum.Parse<UserProvider>(provider);
 
+            var profileImageUrl = await GetProfileImageUrl(result, provider, cancellationToken);
+
             employee = Employee.Create(profileImageUrl, firstName, lastName, email, [], null, Constants.SYSTEM,
                 null, null, true, userProvider, externalId);
 
-            var baseRole = await _rolesAndPermissionsService.GetRole(Roles.BASE_ROLE, cancellationToken);
-            await _rolesAndPermissionsService.UpdateUserRole([baseRole], employee.UserId, cancellationToken);
+            //var baseRole = await _rolesAndPermissionsService.GetRole(Roles.BASE_ROLE, cancellationToken);
+            //await _rolesAndPermissionsService.UpdateUserRole([baseRole], employee.UserId, cancellationToken);
 
             _dbContext.Employees.Add(employee);
             await _dbContext.SaveChangesAsync(cancellationToken);

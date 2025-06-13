@@ -1,4 +1,5 @@
 ﻿using Assessment.Tool.Xilvr.Application.Contracts;
+using Assessment.Tool.Xilvr.Application.Dtos.ScheduledAssessmentScores;
 using Assessment.Tool.Xilvr.Base.Helpers;
 using Assessment.Tool.Xilvr.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -135,6 +136,27 @@ public class ScheduledAssessmentService : IScheduledAssessmentService
         }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<List<ScheduledAssessmentScoreDetailsDto>> GetScoreDetailsByScheduledAssessmentIdAsync(
+    int scheduledAssessmentId,
+    CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.ScheduledAssessmentsScores
+            .Where(s => s.ScheduledAssessmentId == scheduledAssessmentId)
+            .Include(s => s.Employee)
+            .Include(s => s.ScheduledAssessment)
+                .ThenInclude(sa => sa.Batch)
+            .Select(s => new ScheduledAssessmentScoreDetailsDto
+            {
+                EmployeeId = s.EmployeeId,
+                EmployeeName = s.Employee.User.FirstName + s.Employee.User.LastName,
+                Email = s.Employee.User.Email.EmailId,
+                Score = s.Score,
+                IsEvaluated = s.IsEvaluated,
+                BatchName = s.ScheduledAssessment.Batch.Name
+            })
+            .ToListAsync(cancellationToken);
     }
 
 }

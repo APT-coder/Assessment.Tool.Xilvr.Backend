@@ -88,7 +88,7 @@ public class GenerateOtpCommandHandler : IQueryHandler<GenerateOtpCommand, ApiRe
         }
         catch (Exception ex)
         {
-            throw new XilvrException(ExceptionCode.InternalServerError, ex.Message);
+            throw new XilvrException(ExceptionCode.ServiceUnavailable, ex.Message);
         }
 
         return new ApiResponse<string>("OTP sent successfully.", Constants.SUCCESS_MSG);

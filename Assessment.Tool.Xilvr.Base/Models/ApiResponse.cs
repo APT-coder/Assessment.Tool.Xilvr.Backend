@@ -18,6 +18,11 @@ public class ApiResponse<TData>
     //     Specifies the message
     public string Message { get; set; }
 
+    /// <summary>
+    /// Optional meta object for additional information (e.g. base64, filename, pagination)
+    /// </summary>
+    public object? Meta { get; set; }
+
     //
     // Summary:
     //     Initializes a new instance of the Bayada.Joy.Application.Models.ApiResponse`1
@@ -32,5 +37,15 @@ public class ApiResponse<TData>
     {
         Data = data;
         Message = message;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the ApiResponse class with meta data.
+    /// </summary>
+    public ApiResponse(TData data, string message, object meta)
+    {
+        Data = data;
+        Message = message;
+        Meta = meta;
     }
 }

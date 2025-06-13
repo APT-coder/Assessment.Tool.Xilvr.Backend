@@ -5,6 +5,7 @@ using Assessment.Tool.Xilvr.Application.Requests.ScheduledAssessmentAnswers;
 using Assessment.Tool.Xilvr.Application.Requests.ScheduledAssessments;
 using Assessment.Tool.Xilvr.Application.Requests.ScheduledAssessmentScores;
 using Assessment.Tool.Xilvr.Base.Models;
+using Assessment.Tool.Xilvr.Domain.Entities;
 using Assessment.Tool.Xilvr.Shared.Enum;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -221,6 +222,46 @@ public class ScheduledAssessmentController : BaseController
         command.AddRange(request);
 
         var result = await Mediator.Send(command);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Method to update scheduled assessment score
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("scheduled-assessments/{scheduledAssessmentId}/scheduled-assessment-score/report")]
+    [ProducesResponseType(typeof(ApiResponse<List<ScheduledAssessmentScoreDetailsDto>>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Permission(Permissions.VIEW_CANDIDATE_DETAILS,
+    //    Permissions.CANDIDATE_LISTING_VIEW)]
+    public async Task<IActionResult> GetAllEmployeeScoresByScheduledId([FromRoute] int scheduledAssessmentId,
+        [FromQuery] bool? isGenerateReport)
+    {
+        var command = new GetAllEmployeeScoresByScheduledIdQuery
+        {
+            ScheduledAssessmentId = scheduledAssessmentId,
+            IsGenerateReport = isGenerateReport
+        };
+
+        var result = await Mediator.Send(command);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Method to get questions from file.
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost("scheduled-assessments/parse-document/questions")]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType(typeof(ApiResponse<List<Question>>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Permission(Permissions.VIEW_CANDIDATE_DETAILS,
+    //    Permissions.CANDIDATE_LISTING_VIEW)]
+    public async Task<IActionResult> ParseDocument([FromForm] ParseQuestionsDocumentCommand parseQuestionsDocument)
+    {
+        var result = await Mediator.Send(parseQuestionsDocument);
         return Ok(result);
     }
 }

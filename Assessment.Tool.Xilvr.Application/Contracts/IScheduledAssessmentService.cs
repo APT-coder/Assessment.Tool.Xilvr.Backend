@@ -1,4 +1,5 @@
-﻿using Assessment.Tool.Xilvr.Domain.Entities;
+﻿using Assessment.Tool.Xilvr.Application.Dtos.ScheduledAssessmentScores;
+using Assessment.Tool.Xilvr.Domain.Entities;
 
 namespace Assessment.Tool.Xilvr.Application.Contracts;
 
@@ -16,4 +17,11 @@ public interface IScheduledAssessmentService
     /// Updates total score for given list of employees.
     /// </summary>
     public Task UpdateTotalScore(int scheduledAssessmentId, List<long> employeeIds, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Gets scheduled assessment score for a given id.
+    /// </summary>
+    public Task<List<ScheduledAssessmentScoreDetailsDto>> GetScoreDetailsByScheduledAssessmentIdAsync(
+    int scheduledAssessmentId,
+    CancellationToken cancellationToken = default);
 }

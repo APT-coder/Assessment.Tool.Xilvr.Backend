@@ -36,6 +36,7 @@ public static class ServiceRegistry
         services.AddScoped<IAssessmentService, AssessmentService>();
         services.AddScoped<IScheduledAssessmentService, ScheduledAssessmentService>();
         services.AddScoped<IRolesAndPermissionsService, RolesAndPermissionService>();
+        services.AddScoped<IDocumentService, DocumentService>();
 
         services.AddHostedService<ScheduledAssessmentStatusUpdater>();
 
